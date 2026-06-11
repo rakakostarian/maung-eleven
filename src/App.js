@@ -1,14 +1,8 @@
-\import React from 'react';
+import React from 'react';
 import MaungEleven from './MaungEleven';
-import { Analytics } from '@vercel/analytics/react';
 
 function App() {
-  return (
-    <>
-      <MaungEleven />
-      <Analytics />
-    </>
-  );
+  return <MaungEleven />;
 }
 
 export default App;
