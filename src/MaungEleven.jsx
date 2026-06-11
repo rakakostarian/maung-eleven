@@ -1266,9 +1266,11 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
             </div>
 
             {/* Footer */}
-            <div style={{textAlign:"center",paddingTop:10,borderTop:"1px solid rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-              <div style={{fontSize:10,color:"#334155",fontWeight:600}}>Maung Eleven</div>
-              {managerName&&<div style={{fontSize:10,color:"#475569"}}>Manager: {managerName}</div>}
+            <div style={{paddingTop:10,borderTop:"1px solid rgba(255,255,255,0.06)"}}>
+              <div style={{fontSize:10,color:"#38BDF8",fontWeight:600,marginBottom:3}}>
+                🎮 Mainkan di: maung-eleven.vercel.app
+              </div>
+              <div style={{fontSize:9,color:"#334155"}}>Game simulasi bola · Persib All-Time Draft</div>
             </div>
           </div>
 
@@ -1323,9 +1325,16 @@ export default function MaungEleven(){
     setActiveSlot(id);setCards(null);setCardPhase("idle");setSelectedCard(null);
   }
 
+  const cardsRef = useRef(null);
   function rollCards(){
     const slot=slots.find(s=>s.id===activeSlot);
     if(!slot)return;
+    // Scroll to cards after short delay
+    setTimeout(()=>{
+      if(cardsRef.current){
+        cardsRef.current.scrollIntoView({behavior:"smooth",block:"nearest"});
+      }
+    }, 250);
     const usedNames=[...excludedNames];
     const rolled=[];
     for(let i=0;i<5;i++){
@@ -1614,7 +1623,7 @@ export default function MaungEleven(){
                     </div>
                   </div>
                   {cards&&(
-                    <div>
+                    <div ref={cardsRef}>
                       {/* Row 1: first 3 cards */}
                       <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginBottom:6}}>
                         {cards.slice(0,3).map((c,i)=><PlayerCard key={i} card={c} selectable={cardPhase==="choosing"} selected={selectedCard===i} onClick={()=>pickCard(i)}/>)}
@@ -1683,6 +1692,24 @@ export default function MaungEleven(){
           />
         )}
 
+      </div>
+
+      {/* ── GAME FOOTER ── */}
+      <div style={{
+        borderTop:"1px solid rgba(255,255,255,0.04)",
+        padding:"14px 16px",
+        textAlign:"center",
+        background:"#040810",
+      }}>
+        <div style={{fontSize:11,color:"#2D3748",lineHeight:1.8}}>
+          <div>Game simulasi sepak bola Indonesia — khususnya untuk fans Persib Bandung</div>
+          <div>Terinspirasi dari <span style={{color:"#374151"}}>38-0.app</span></div>
+          <div style={{marginTop:4}}>
+            <span style={{color:"#374151"}}>dibuat oleh rakakostarian</span>
+            <span style={{color:"#1E293B",margin:"0 6px"}}>·</span>
+            <span style={{color:"#2D3748"}}>2026</span>
+          </div>
+        </div>
       </div>
     </div>
   );
