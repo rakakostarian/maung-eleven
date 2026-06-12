@@ -1,4 +1,10 @@
+/* eslint-disable import/first */
 import { render, screen } from '@testing-library/react';
+
+// Mock Vercel Analytics before importing App
+jest.mock('@vercel/analytics/react', () => ({
+  Analytics: () => null,
+}), { virtual: true });
 
 // Mock Vercel Speed Insights before importing App
 jest.mock('@vercel/speed-insights/react', () => ({
