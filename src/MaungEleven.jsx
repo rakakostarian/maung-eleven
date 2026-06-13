@@ -15,129 +15,201 @@ function useIsMobile(){
 const getTier = r => r >= 98 ? "Legenda" : r >= 89 ? "Gold" : r >= 83 ? "Silver" : "Bronze";
 
 const RAW = [
-  {name:"Teja Paku Alam",pos:["GK"],rating:91,type:"Lokal"},
-  {name:"I Made Wirawan",pos:["GK"],rating:86,type:"Lokal"},
-  {name:"Adam Przybek",pos:["GK"],rating:82,type:"Asing"},
-  {name:"Kevin Mendoza",pos:["GK"],rating:90,type:"Asing"},
-  {name:"Fitrah Maulana",pos:["GK"],rating:80,type:"Youth"},
-  {name:"Muhammad Natshir",pos:["GK"],rating:78,type:"Lokal"},
-  {name:"Satrio Azhar",pos:["GK"],rating:77,type:"Youth"},
-  {name:"Shahar Ginanjar",pos:["GK"],rating:86,type:"Lokal"},
-  {name:"Markus Horison",pos:["GK"],rating:87,type:"Lokal"},
-  {name:"Cecep Supriatna",pos:["GK"],rating:82,type:"Lokal"},
-  {name:"Jendry Pitoy",pos:["GK"],rating:86,type:"Lokal"},
-  {name:"Victor Igbonefo",pos:["CB"],rating:90,type:"Lokal"},
-  {name:"Nick Kuipers",pos:["CB","RB"],rating:88,type:"Asing"},
-  {name:"Federico Barba",pos:["CB","LB"],rating:92,type:"Asing"},
-  {name:"Bojan Malisic",pos:["CB"],rating:86,type:"Asing"},
-  {name:"Fabiano Beltrame",pos:["CB","CDM"],rating:85,type:"Asing"},
-  {name:"Vladimir Vujovic",pos:["CB"],rating:85,type:"Asing"},
-  {name:"Matricardi",pos:["CB"],rating:89,type:"Asing"},
-  {name:"Alfeandra Dewangga",pos:["LB","CDM"],rating:85,type:"Lokal"},
-  {name:"Dion Markx",pos:["CB"],rating:85,type:"Asing"},
-  {name:"Andrew Patrick Jung",pos:["ST"],rating:90,type:"Asing"},
-  {name:"Kakang Rudianto",pos:["CB","RB"],rating:84,type:"Youth"},
-  {name:"Achmad Jufriyanto",pos:["CB","LB"],rating:89,type:"Lokal"},
-  {name:"Daisuke Sato",pos:["RB","CDM","LB"],rating:84,type:"Asing"},
-  {name:"Tony Sucipto",pos:["LB","CDM","CB"],rating:82,type:"Lokal"},
-  {name:"Frets Butuan",pos:["RW","LW","RM"],rating:83,type:"Lokal"},
-  {name:"Layvin Kurzawa",pos:["LB","LWB","CDM"],rating:90,type:"Asing"},
-  {name:"Ardi Idrus",pos:["LB","LWB","LM"],rating:85,type:"Lokal"},
-  {name:"Wildansyah",pos:["LB","LWB","LM"],rating:81,type:"Lokal"},
-  {name:"Zalnando",pos:["RB","RWB","RM"],rating:84,type:"Lokal"},
-  {name:"Frans Putros",pos:["RB","CDM"],rating:89,type:"Asing"},
-  {name:"Supardi Nasir",pos:["RB","RWB","RM"],rating:89,type:"Lokal"},
-  {name:"Henhen Herdiana",pos:["RB","RM","RWB"],rating:81,type:"Lokal"},
-  {name:"Robi Darwis",pos:["RB","LB","CDM"],rating:83,type:"Youth"},
-  {name:"Ferdiansyah",pos:["RB","RM"],rating:82,type:"Youth"},
-  {name:"Hariono",pos:["CDM","CM"],rating:85,type:"Lokal"},
-  {name:"Dedi Kusnandar",pos:["CDM","CM"],rating:86,type:"Lokal"},
-  {name:"Oh In-Kyun",pos:["CDM","CM"],rating:85,type:"Asing"},
-  {name:"Marc Klok",pos:["CDM","CM"],rating:94,type:"Asing"},
-  {name:"Raphael Maitimo",pos:["CM","CAM","ST"],rating:86,type:"Lokal"},
-  {name:"Ricky Kambuaya",pos:["CM","CAM","RM"],rating:87,type:"Lokal"},
-  {name:"Beckham Putra",pos:["RW","LW","CAM"],rating:90,type:"Lokal"},
-  {name:"Kim Jeffrey Kurniawan",pos:["CM","LM","CDM"],rating:86,type:"Lokal"},
-  {name:"Ghozali Siregar",pos:["RW","LW","RM"],rating:80,type:"Lokal"},
-  {name:"Michael Essien",pos:["CM","CDM"],rating:90,type:"Asing"},
-  {name:"Eliano Reijnders",pos:["LW","LB","CDM"],rating:88,type:"Lokal"},
-  {name:"Gian Zola Nasrullah",pos:["CAM","LW","LM"],rating:83,type:"Lokal"},
-  {name:"Esteban Vizcarra",pos:["CAM","LW","RM"],rating:88,type:"Asing"},
-  {name:"Shohei Matsunaga",pos:["CAM","CM"],rating:85,type:"Asing"},
-  {name:"Atep Rizal",pos:["LM","LW","CAM"],rating:88,type:"Lokal"},
-  {name:"Saddil Ramdani",pos:["LW","LM"],rating:87,type:"Lokal"},
-  {name:"Erwin Ramdani",pos:["LW","LM","RM"],rating:85,type:"Lokal"},
-  {name:"Febri Hariyadi",pos:["LW","LM"],rating:87,type:"Lokal"},
-  {name:"Nazriel",pos:["CDM","CM"],rating:82,type:"Youth"},
-  {name:"Zulham Zamrun",pos:["LW","ST"],rating:87,type:"Lokal"},
-  {name:"Tantan",pos:["LW","RW"],rating:82,type:"Lokal"},
-  {name:"Ciro Alves",pos:["RW","ST","LW"],rating:93,type:"Asing"},
-  {name:"Fulgensius Billy Keraf",pos:["RW","ST","RM"],rating:80,type:"Youth"},
-  {name:"David da Silva",pos:["ST"],rating:96,type:"Asing"},
-  {name:"Uilliam Baros",pos:["LW","RW","LB"],rating:87,type:"Asing"},
-  {name:"Wander Luiz",pos:["ST","CAM"],rating:90,type:"Asing"},
-  {name:"Jonathan Bauman",pos:["ST","CAM"],rating:90,type:"Asing"},
-  {name:"Ezechiel N'Douassel",pos:["ST","RW"],rating:88,type:"Asing"},
-  {name:"Geoffrey Castillion",pos:["ST","LW"],rating:83,type:"Asing"},
-  {name:"Serginho van Dijk",pos:["ST","LW"],rating:88,type:"Asing"},
-  {name:"Carlton Cole",pos:["ST"],rating:82,type:"Asing"},
-  {name:"Belencoso",pos:["ST"],rating:84,type:"Asing"},
-  {name:"Muchlis Hadi Ning",pos:["ST","LW"],rating:81,type:"Lokal"},
-  {name:"Airlangga S.",pos:["ST","RW"],rating:81,type:"Lokal"},
-  {name:"Rachmat Irianto",pos:["CDM","CB","RB"],rating:83,type:"Lokal"},
-  {name:"Edo Febriansyah",pos:["LB","LWB","LM"],rating:84,type:"Lokal"},
-  {name:"Ryan Kurnia",pos:["ST","RW","LW"],rating:83,type:"Lokal"},
-  {name:"Thom Haye",pos:["CM","CAM","CDM"],rating:93,type:"Lokal"},
-  {name:"Makan Konate",pos:["CAM","CM","LW"],rating:91,type:"Asing"},
-  {name:"Stefano Beltrame",pos:["CAM","LW","RW"],rating:88,type:"Asing"},
-  {name:"Gustavo Franca",pos:["CB"],rating:89,type:"Asing"},
-  {name:"Tyronne Del Pino",pos:["CAM"],rating:93,type:"Asing"},
-  {name:"Rezaldi Hehanussa",pos:["LB","LWB","LM"],rating:84,type:"Lokal"},
-  {name:"Eka Ramdani",pos:["CM","CDM","CAM"],rating:87,type:"Lokal"},
-  {name:"Berguinho",pos:["RW","CAM"],rating:89,type:"Asing"},
-  {name:"Adzikry",pos:["LW","RW"],rating:82,type:"Youth"},
-  {name:"Mateo Kojican",pos:["CDM","CM"],rating:85,type:"Asing"},
-  {name:"Firman Utina",pos:["CAM","CM"],rating:91,type:"Lokal"},
-  {name:"Ridwan",pos:["RW","RM"],rating:88,type:"Lokal"},
-  {name:"Gonzales",pos:["ST"],rating:95,type:"Asing"},
-  {name:"Ferdinand Sinaga",pos:["ST","LW"],rating:89,type:"Lokal"},
-  {name:"Nova Arianto",pos:["CB"],rating:87,type:"Lokal"},
-  {name:"Hilton Morreira",pos:["LW","RW"],rating:89,type:"Asing"},
-  {name:"Dimas Drajad",pos:["ST"],rating:84,type:"Youth"},
+  {name:"Sutiono Lamso",pos:["ST"],rating:98,type:"Legenda"},
   {name:"Anwar Sanusi",pos:["GK"],rating:98,type:"Legenda"},
   {name:"Robby Darwis",pos:["CB"],rating:98,type:"Legenda"},
   {name:"Yusuf Bachtiar",pos:["CM"],rating:98,type:"Legenda"},
   {name:"Yudi Guntara",pos:["CAM"],rating:98,type:"Legenda"},
-  {name:"Sutiono Lamso",pos:["ST"],rating:98,type:"Legenda"},
+  {name:"Dede Iskandar",pos:["RB","RWB","RM"],rating:98,type:"Legenda"},
+  {name:"Ade Mulyono",pos:["LB","LWB","LM"],rating:98,type:"Legenda"},
+  {name:"David da Silva",pos:["ST"],rating:96,type:"Asing"},
+  {name:"Gonzales",pos:["ST"],rating:95,type:"Lokal"},
+  {name:"Marc Klok",pos:["CDM","CM"],rating:94,type:"Lokal"},
+  {name:"Ciro Alves",pos:["RW","ST","LW"],rating:93,type:"Asing"},
+  {name:"Thom Haye",pos:["CM","CAM","CDM"],rating:93,type:"Lokal"},
+  {name:"Tyronne Del Pino",pos:["CAM"],rating:93,type:"Asing"},
+  {name:"Federico Barba",pos:["CB","LB"],rating:92,type:"Asing"},
+  {name:"Bekamenga",pos:["ST"],rating:92,type:"Asing"},
+  {name:"Teja Paku Alam",pos:["GK"],rating:91,type:"Lokal"},
+  {name:"Makan Konate",pos:["CAM","CM","LW"],rating:91,type:"Asing"},
+  {name:"Firman Utina",pos:["CAM","CM"],rating:91,type:"Lokal"},
+  {name:"Lorenzo Cabanas",pos:["CAM"],rating:91,type:"Asing"},
+  {name:"Nyeck Nyobe",pos:["CB"],rating:91,type:"Asing"},
+  {name:"Beckham Putra",pos:["RW","LW","CAM"],rating:91,type:"Lokal"},
+  {name:"Berguinho",pos:["RW","CAM"],rating:91,type:"Asing"},
+  {name:"Hilton Morreira",pos:["LW","RW"],rating:91,type:"Asing"},
+  {name:"Kevin Mendoza",pos:["GK"],rating:90,type:"Asing"},
+  {name:"Victor Igbonefo",pos:["CB"],rating:90,type:"Lokal"},
+  {name:"Matricardi",pos:["CB"],rating:90,type:"Asing"},
+  {name:"Layvin Kurzawa",pos:["LB","LWB","CDM"],rating:90,type:"Asing"},
+  {name:"Michael Essien",pos:["CM","CDM"],rating:90,type:"Asing"},
+  {name:"Andrew Patrick Jung",pos:["ST"],rating:90,type:"Asing"},
+  {name:"Wander Luiz",pos:["ST","CAM"],rating:90,type:"Asing"},
+  {name:"Jonathan Bauman",pos:["ST","CAM"],rating:90,type:"Asing"},
+  {name:"Redouane Barkaoui",pos:["ST"],rating:90,type:"Asing"},
+  {name:"Sinthaweechai Kosin",pos:["GK"],rating:90,type:"Asing"},
+  {name:"Alberto Rodriguez",pos:["CB"],rating:90,type:"Asing"},
+  {name:"Nick Kuipers",pos:["CB","RB"],rating:89,type:"Asing"},
+  {name:"Achmad Jufriyanto",pos:["CB","CDM"],rating:89,type:"Lokal"},
+  {name:"Frans Putros",pos:["RB","CDM"],rating:89,type:"Asing"},
+  {name:"Supardi Nasir",pos:["RB","RWB","RM"],rating:89,type:"Lokal"},
+  {name:"Dedi Kusnandar",pos:["CDM","CM"],rating:89,type:"Lokal"},
+  {name:"Ferdinand Sinaga",pos:["ST","LW"],rating:89,type:"Lokal"},
+  {name:"Edo Febriansyah",pos:["LB","LWB","LM"],rating:89,type:"Lokal"},
+  {name:"Gustavo Franca",pos:["CB"],rating:89,type:"Asing"},
+  {name:"Radovic",pos:["CAM"],rating:89,type:"Asing"},
+  {name:"Adam Alis",pos:["CM","CAM"],rating:89,type:"Lokal"},
+  {name:"Suchao Nutnum",pos:["CAM","LM","RM"],rating:89,type:"Asing"},
+  {name:"Luciano Guaycochea",pos:["CDM","CM"],rating:89,type:"Asing"},
+  {name:"Patricio Jimenez",pos:["CB"],rating:89,type:"Asing"},
+  {name:"Febri Hariyadi",pos:["RW","RM"],rating:89,type:"Lokal"},
+  {name:"Zulham Zamrun",pos:["LW","ST"],rating:89,type:"Lokal"},
+  {name:"I Made Wirawan",pos:["GK"],rating:88,type:"Lokal"},
+  {name:"Tony Sucipto",pos:["LB","CDM","CB"],rating:88,type:"Lokal"},
+  {name:"Esteban Vizcarra",pos:["CAM","LW","RM"],rating:88,type:"Asing"},
+  {name:"Atep Rizal",pos:["LM","LW","CAM"],rating:88,type:"Lokal"},
+  {name:"Ezechiel N'Douassel",pos:["ST","RW"],rating:88,type:"Asing"},
+  {name:"Serginho van Dijk",pos:["ST","LW"],rating:88,type:"Lokal"},
+  {name:"Stefano Beltrame",pos:["CAM","LW","RW"],rating:88,type:"Asing"},
+  {name:"Ridwan",pos:["RW","RM"],rating:88,type:"Lokal"},
+  {name:"Zulkifli Syukur",pos:["RB","RWB"],rating:88,type:"Lokal"},
+  {name:"Gilang Angga K.",pos:["RB","RWB"],rating:88,type:"Lokal"},
+  {name:"Tema Mursadat",pos:["GK"],rating:88,type:"Lokal"},
+  {name:"Abanda Herman",pos:["CB"],rating:88,type:"Asing"},
+  {name:"Eliano Reijnders",pos:["LW","LB","CDM"],rating:88,type:"Lokal"},
+  {name:"Markus Horison",pos:["GK"],rating:87,type:"Lokal"},
+  {name:"Vladimir Vujovic",pos:["CB"],rating:87,type:"Asing"},
+  {name:"Daisuke Sato",pos:["LB","LWB","RB"],rating:87,type:"Asing"},
+  {name:"Ricky Kambuaya",pos:["CM","CAM","RM"],rating:87,type:"Lokal"},
+  {name:"Saddil Ramdani",pos:["LW","LM"],rating:87,type:"Lokal"},
+  {name:"Uilliam Baros",pos:["LW","RW","RWB"],rating:87,type:"Asing"},
+  {name:"Zaenal Arief",pos:["ST"],rating:87,type:"Lokal"},
+  {name:"Herman Dzumafo",pos:["ST"],rating:87,type:"Asing"},
+  {name:"Eka Ramdani",pos:["CM","CDM","CAM"],rating:87,type:"Lokal"},
+  {name:"Budi Sudarsono",pos:["ST"],rating:87,type:"Lokal"},
+  {name:"Nova Arianto",pos:["CB"],rating:87,type:"Lokal"},
+  {name:"Rashid",pos:["CDM","CM"],rating:87,type:"Asing"},
+  {name:"Nasuha",pos:["LB","LWB","LM"],rating:87,type:"Lokal"},
+  {name:"Shahar Ginanjar",pos:["GK"],rating:86,type:"Lokal"},
+  {name:"Jendry Pitoy",pos:["GK"],rating:86,type:"Lokal"},
+  {name:"Bojan Malisic",pos:["CB"],rating:86,type:"Asing"},
+  {name:"Hariono",pos:["CDM","CM"],rating:86,type:"Lokal"},
+  {name:"Raphael Maitimo",pos:["CM","CAM","ST"],rating:86,type:"Lokal"},
+  {name:"Kim Jeffrey Kurniawan",pos:["CM","LM","CDM"],rating:86,type:"Lokal"},
+  {name:"Ezra Walian",pos:["ST","CAM"],rating:86,type:"Lokal"},
+  {name:"Kenji Adachihara",pos:["ST","LW"],rating:86,type:"Asing"},
+  {name:"Marcio Souza",pos:["ST","LW","RW"],rating:86,type:"Asing"},
   {name:"Levy Madinda",pos:["CM","CAM"],rating:86,type:"Asing"},
   {name:"Omid Nazari",pos:["CM","CAM"],rating:86,type:"Asing"},
-  {name:"Radovic",pos:["CAM"],rating:89,type:"Asing"},
+  {name:"Julio Cesar",pos:["CB"],rating:86,type:"Asing"},
+  {name:"Robbie Gaspar",pos:["CDM","CM"],rating:86,type:"Asing"},
+  {name:"Fabiano Beltrame",pos:["CB","CDM"],rating:85,type:"Asing"},
+  {name:"Dion Markx",pos:["CB"],rating:85,type:"Youth"},
+  {name:"Kakang Rudianto",pos:["CB","RB"],rating:85,type:"Youth"},
+  {name:"Ardi Idrus",pos:["LB","LWB","LM"],rating:85,type:"Lokal"},
+  {name:"Robi Darwis",pos:["RB","LB","CDM"],rating:85,type:"Youth"},
+  {name:"Oh In-Kyun",pos:["CDM","CM"],rating:85,type:"Asing"},
+  {name:"Shohei Matsunaga",pos:["CAM","LW","RW"],rating:85,type:"Asing"},
+  {name:"Erwin Ramdani",pos:["LW","LM","RM"],rating:85,type:"Lokal"},
+  {name:"Tantan",pos:["LW","RW"],rating:85,type:"Lokal"},
+  {name:"Mateo Kojican",pos:["CDM","CM"],rating:85,type:"Asing"},
+  {name:"Ramon Tanque",pos:["ST"],rating:85,type:"Asing"},
+  {name:"Noh Alam Shah",pos:["ST"],rating:85,type:"Asing"},
+  {name:"Suwita Pata",pos:["CDM","CB"],rating:85,type:"Lokal"},
+  {name:"Alfeandra Dewangga",pos:["LB","CDM"],rating:84,type:"Lokal"},
+  {name:"Zalnando",pos:["LB","LWB","RB"],rating:84,type:"Lokal"},
+  {name:"Nazriel",pos:["CDM","CM"],rating:84,type:"Youth"},
+  {name:"Rachmat Irianto",pos:["CDM","CB","RB"],rating:84,type:"Lokal"},
+  {name:"Rezaldi Hehanussa",pos:["LB","LWB","LM"],rating:84,type:"Lokal"},
+  {name:"Belencoso",pos:["ST"],rating:84,type:"Asing"},
+  {name:"Dimas Drajad",pos:["ST"],rating:84,type:"Youth"},
+  {name:"Yanto Basna",pos:["CB"],rating:84,type:"Lokal"},
+  {name:"Robertino Pugliara",pos:["CAM"],rating:84,type:"Asing"},
+  {name:"Mbida Messi",pos:["CAM"],rating:84,type:"Asing"},
+  {name:"Satoshi Otomo",pos:["CAM","LW","RW"],rating:84,type:"Asing"},
+  {name:"Frets Butuan",pos:["RW","LW","RM"],rating:83,type:"Lokal"},
+  {name:"Gian Zola Nasrullah",pos:["CAM","LW","LM"],rating:83,type:"Lokal"},
+  {name:"Maman",pos:["CB"],rating:83,type:"Lokal"},
+  {name:"Zulkifli Lukmansyah",pos:["RB","LB","RM"],rating:83,type:"Youth"},
+  {name:"Geoffrey Castillion",pos:["ST","LW"],rating:83,type:"Asing"},
+  {name:"Ryan Kurnia",pos:["ST","RW","LW"],rating:83,type:"Lokal"},
+  {name:"Djibril Coulibaly",pos:["ST"],rating:83,type:"Asing"},
+  {name:"Putu Gede",pos:["RB","RWB"],rating:83,type:"Lokal"},
+  {name:"Nasser Al Sebai",pos:["CB"],rating:83,type:"Asing"},
+  {name:"Zdravko Dragicevic",pos:["CAM","ST"],rating:83,type:"Asing"},
+  {name:"Shahril Ishak",pos:["LM","RM","LW"],rating:83,type:"Asing"},
+  {name:"Adam Przybek",pos:["GK"],rating:82,type:"Asing"},
+  {name:"Cecep Supriatna",pos:["GK"],rating:82,type:"Lokal"},
+  {name:"Ferdiansyah",pos:["RM","LM","RW"],rating:82,type:"Youth"},
+  {name:"Adzikry",pos:["LW","RW"],rating:82,type:"Youth"},
   {name:"Siswanto",pos:["LW","RW"],rating:82,type:"Lokal"},
+  {name:"Rene Mihelic",pos:["CAM"],rating:82,type:"Asing"},
+  {name:"Carlton Cole",pos:["ST"],rating:82,type:"Asing"},
+  {name:"Moses Sakyi",pos:["ST"],rating:82,type:"Asing"},
+  {name:"Wildansyah",pos:["LB","LWB","LM"],rating:81,type:"Lokal"},
+  {name:"Henhen Herdiana",pos:["RB","RM","RWB"],rating:81,type:"Lokal"},
   {name:"Lopicic",pos:["CAM","LW","RW"],rating:81,type:"Asing"},
-  {name:"Kippersluis",pos:["ST","CAM"],rating:80,type:"Asing"},
-  {name:"Pablo Frances",pos:["CAM","LW"],rating:79,type:"Asing"},
+  {name:"Aliyudin",pos:["LW","LM","RM"],rating:81,type:"Lokal"},
+  {name:"Baihakki Khaizan",pos:["CB"],rating:81,type:"Asing"},
+  {name:"Asri Akbar",pos:["CDM"],rating:81,type:"Lokal"},
+  {name:"Muchlis Hadi Ning",pos:["ST","LW"],rating:81,type:"Lokal"},
+  {name:"David Rumakiek",pos:["LB","LWB"],rating:81,type:"Youth"},
+  {name:"Airlangga S.",pos:["ST","RW"],rating:81,type:"Lokal"},
+  {name:"Yandi Sofyan",pos:["ST","LW"],rating:81,type:"Lokal"},
+  {name:"Marcos Flores",pos:["CAM"],rating:81,type:"Asing"},
+  {name:"David Laly",pos:["LW","LM","RM"],rating:81,type:"Lokal"},
+  {name:"Sergio Castel",pos:["ST"],rating:81,type:"Asing"},
+  {name:"Aang Suparman",pos:["CB"],rating:81,type:"Lokal"},
+  {name:"Patrich Wanggai",pos:["ST"],rating:81,type:"Lokal"},
+  {name:"Fitrah Maulana",pos:["GK"],rating:80,type:"Youth"},
+  {name:"Ghozali Siregar",pos:["RW","LW","RM"],rating:80,type:"Lokal"},
+  {name:"Fulgensius Billy Keraf",pos:["RW","ST","RM"],rating:80,type:"Youth"},
   {name:"Weeks Lewis",pos:["LW","CAM","RW"],rating:80,type:"Asing"},
+  {name:"Arsan Makarim",pos:["RW"],rating:80,type:"Youth"},
+  {name:"Bayu Fiqri",pos:["RB","RWB"],rating:80,type:"Youth"},
+  {name:"Fitrul Dwi Rustapa",pos:["GK"],rating:80,type:"Lokal"},
+  {name:"Diogo Ferreira",pos:["CB"],rating:80,type:"Asing"},
+  {name:"Abdul Rahman",pos:["CB"],rating:80,type:"Lokal"},
+  {name:"Taufiq",pos:["CDM","CM"],rating:80,type:"Lokal"},
+  {name:"Abdul Azis",pos:["CDM"],rating:80,type:"Lokal"},
+  {name:"Mailson Lima",pos:["LW","RW","ST"],rating:80,type:"Asing"},
+  {name:"Gevorkyan",pos:["RW","LW"],rating:79,type:"Asing"},
+  {name:"Kippersluis",pos:["ST","CAM"],rating:80,type:"Asing"},
+  {name:"Kastaneer",pos:["ST"],rating:80,type:"Asing"},
+  {name:"Bruno Cantanhade",pos:["ST"],rating:80,type:"Asing"},
+  {name:"Rudiyana",pos:["RM","LM","RW"],rating:80,type:"Lokal"},
+  {name:"Pablo Frances",pos:["CAM","LW"],rating:79,type:"Asing"},
+  {name:"Kevin Pasha",pos:["CB"],rating:79,type:"Youth"},
+  {name:"Diandra Diaz",pos:["CDM","CM"],rating:79,type:"Youth"},
+  {name:"Sheva Sanggasi",pos:["GK"],rating:79,type:"Youth"},
+  {name:"Ahmad Agung",pos:["CDM"],rating:79,type:"Lokal"},
+  {name:"Faris Abdul",pos:["CB"],rating:79,type:"Youth"},
+  {name:"Agung Mulyadi",pos:["RW","LW","CAM"],rating:79,type:"Lokal"},
+  {name:"Athaya Zahran",pos:["ST"],rating:79,type:"Youth"},
+  {name:"Ridwan Ansori",pos:["ST","LW","CAM"],rating:79,type:"Youth"},
+  {name:"Muhammad Natshir",pos:["GK"],rating:78,type:"Lokal"},
+  {name:"Rhaka Bilhuda",pos:["GK"],rating:78,type:"Youth"},
+  {name:"Reky Rahayu",pos:["GK"],rating:78,type:"Lokal"},
+  {name:"Sigit Hermawan",pos:["ST","LW","RW"],rating:78,type:"Lokal"},
+  {name:"Satrio Azhar",pos:["GK"],rating:77,type:"Youth"},
   {name:"Jajang Sukmara",pos:["LB","RB","RWB"],rating:77,type:"Lokal"},
   {name:"Agung Pribadi",pos:["CAM","CM"],rating:77,type:"Lokal"},
   {name:"Dias Angga",pos:["RB","LB","LWB"],rating:77,type:"Lokal"},
-  {name:"Sigit Hermawan",pos:["ST","LW","RW"],rating:78,type:"Lokal"},
-  {name:"Yandi Sofyan",pos:["ST","LW"],rating:81,type:"Lokal"},
-  {name:"Zaenal Arief",pos:["ST"],rating:87,type:"Lokal"},
-  {name:"Aliyudin",pos:["LW","LM","RM"],rating:81,type:"Lokal"},
-  {name:"Yanto Basna",pos:["CB"],rating:80,type:"Lokal"},
-  {name:"Maman",pos:["CB"],rating:83,type:"Lokal"},
 ];
+
 // Compute tier from rating — single source of truth
 const PLAYERS = RAW.map(p => ({ ...p, tier: getTier(p.rating) }));
 
 const FORMATIONS = {
-  "4-3-3":  {slots:["GK","LB","CB","CB","RB","CM","CM","CM","LW","ST","RW"],desc:"Balanced, wide attack"},
-  "4-4-2":  {slots:["GK","LB","CB","CB","RB","LM","CM","CM","RM","ST","ST"],desc:"Classic double striker"},
-  "4-2-3-1":{slots:["GK","LB","CB","CB","RB","CDM","CDM","LW","CAM","RW","ST"],desc:"Double pivot, attacking trio"},
-  "3-5-2":  {slots:["GK","CB","CB","CB","LWB","CM","CM","CM","RWB","ST","ST"],desc:"Wing-back dominance"},
-  "5-3-2":  {slots:["GK","LWB","CB","CB","CB","RWB","CM","CM","CM","ST","ST"],desc:"Solid defence, counter"},
-  "4-1-4-1":{slots:["GK","LB","CB","CB","RB","CDM","LM","CM","CM","RM","ST"],desc:"CDM anchor, wide control"},
-  "3-4-3":  {slots:["GK","CB","CB","CB","LM","CM","CM","RM","LW","ST","RW"],desc:"All-out attack"},
+  "4-3-3":  {slots:["GK","LB","CB","CB","RB","CM","CM","CM","LW","ST","RW"],desc:"Seimbang dengan serangan lebar"},
+  "4-4-2":  {slots:["GK","LB","CB","CB","RB","LM","CM","CM","RM","ST","ST"],desc:"Klasik dua striker"},
+  "4-2-3-1":{slots:["GK","LB","CB","CB","RB","CDM","CDM","LW","CAM","RW","ST"],desc:"Double pivot, trio serang"},
+  "3-5-2":  {slots:["GK","CB","CB","CB","LWB","CM","CM","CM","RWB","ST","ST"],desc:"Dominasi wing-back"},
+  "5-3-2":  {slots:["GK","LWB","CB","CB","CB","RWB","CM","CM","CM","ST","ST"],desc:"Pertahanan kokoh, serangan balik"},
+  "4-1-4-1":{slots:["GK","LB","CB","CB","RB","CDM","LM","CM","CM","RM","ST"],desc:"Jangkar CDM, kontrol lebar"},
+  "3-4-3":  {slots:["GK","CB","CB","CB","LM","CM","CM","RM","LW","ST","RW"],desc:"Serangan total habis-habisan"},
+  "4-2-4":  {slots:["GK","LB","CB","CB","RB","CM","CM","LW","RW","ST","ST"],desc:"Ultra serang, 4 penyerang"},
+  "4-3-2-1":{slots:["GK","LB","CB","CB","RB","CM","CM","CM","CAM","CAM","ST"],desc:"Pohon cemara, dua playmaker"},
 };
 
 const COORDS = {
@@ -148,6 +220,8 @@ const COORDS = {
   "5-3-2":  [[50,90],[11,65],[28,72],[50,72],[72,72],[89,65],[28,49],[50,45],[72,49],[36,18],[64,18]],
   "4-1-4-1":[[50,90],[13,71],[35,71],[65,71],[87,71],[50,61],[13,47],[36,43],[64,43],[87,47],[50,15]],
   "3-4-3":  [[50,90],[26,73],[50,73],[74,73],[16,53],[38,49],[62,49],[84,53],[16,24],[50,16],[84,24]],
+  "4-2-4":  [[50,90],[13,71],[35,71],[65,71],[87,71],[38,56],[62,56],[12,22],[88,22],[36,16],[64,16]],
+  "4-3-2-1":[[50,90],[13,71],[35,71],[65,71],[87,71],[28,56],[50,52],[72,56],[36,36],[64,36],[50,18]],
 };
 
 const DEF_POS=["CB","LB","RB","LWB","RWB"];
@@ -590,17 +664,61 @@ function GuideBox({icon,title,children}){
 }
 
 // ── SIMULATION VIEW ───────────────────────────────────────────────────────────
+
+// ── SCROLL DOWN FLOAT ─────────────────────────────────────────────────────────
+function ScrollDownFloat({targetRef, onHide}){
+  const [visible, setVisible] = useState(true);
+
+  useEffect(()=>{
+    function check(){
+      if(!targetRef.current) return;
+      const rect = targetRef.current.getBoundingClientRect();
+      // Hide when target is within 120px of viewport bottom
+      if(rect.top < window.innerHeight + 120){
+        setVisible(false);
+        onHide?.();
+      }
+    }
+    window.addEventListener('scroll', check, {passive:true});
+    check(); // run once immediately
+    return()=>window.removeEventListener('scroll', check);
+  },[]);
+
+  if(!visible) return null;
+  return(
+    <div style={{
+      position:"fixed",bottom:28,left:"50%",transform:"translateX(-50%)",
+      zIndex:50,
+    }}>
+      <button
+        onClick={()=>targetRef.current?.scrollIntoView({behavior:"smooth",block:"end"})}
+        style={{
+          background:"#003DA5",color:"#fff",border:"none",
+          padding:"10px 22px",borderRadius:999,
+          fontSize:13,fontWeight:700,cursor:"pointer",
+          boxShadow:"0 4px 20px rgba(0,61,165,0.55)",
+          display:"flex",alignItems:"center",gap:7,whiteSpace:"nowrap",
+        }}
+      >
+        Lihat Hasil <span style={{fontSize:16,lineHeight:1}}>↓</span>
+      </button>
+    </div>
+  );
+}
+
 function SimulationView({ovr,opponents,lineup,onDone}){
-  // Single state object — no split state, no race conditions
   const [tick, setTick] = useState(0);
+  const [skipped, setSkipped] = useState(false);
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const bottomRef = useRef(null);
+  const ivRef = useRef(null);
   const store = useRef({
-    allMatches: [],   // pre-computed 34 matches
-    shown: [],        // matches revealed so far
+    allMatches: [],
+    shown: [],
     finalData: null,
     done: false,
   });
 
-  // Pre-compute on mount
   useEffect(()=>{
     const fd = simulateFullSeason(ovr, opponents, lineup);
     fd.ovr = ovr;
@@ -608,19 +726,33 @@ function SimulationView({ovr,opponents,lineup,onDone}){
     store.current.finalData = fd;
 
     let idx = 0;
-    const iv = setInterval(()=>{
+    ivRef.current = setInterval(()=>{
       if(idx < store.current.allMatches.length){
         store.current.shown = store.current.allMatches.slice(0, idx+1);
         idx++;
-        setTick(t => t+1); // trigger re-render
+        setTick(t => t+1);
       } else {
-        clearInterval(iv);
+        clearInterval(ivRef.current);
         store.current.done = true;
         setTick(t => t+1);
+        setTimeout(()=>setShowScrollBtn(true), 500);
       }
     }, 1000);
-    return () => clearInterval(iv);
+    return () => clearInterval(ivRef.current);
   }, []);
+
+  function skipSimulation(){
+    if(store.current.done) return;
+    clearInterval(ivRef.current);
+    setSkipped(true);
+    store.current.shown = store.current.allMatches;
+    setTimeout(()=>{
+      store.current.done = true;
+      setTick(t => t+1);
+      setTimeout(()=>setShowScrollBtn(true), 300);
+    }, 1500);
+  }
+
 
   const { shown, finalData, done } = store.current;
   const W = shown.filter(r=>r.result==="W").length;
@@ -655,7 +787,7 @@ function SimulationView({ovr,opponents,lineup,onDone}){
           ))}
         </div>
         <div style={{textAlign:"center",fontSize:14,color:"#3B82F6",fontWeight:800,marginBottom:12}}>{pts} poin</div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3,marginBottom:14}}>
           {Array.from({length:34}).map((_,i)=>{
             const r = shown[i];
             const bg = r ? (r.result==="W"?"rgba(34,197,94,0.25)":r.result==="D"?"rgba(245,158,11,0.25)":"rgba(239,68,68,0.2)") : "rgba(255,255,255,0.04)";
@@ -667,6 +799,17 @@ function SimulationView({ovr,opponents,lineup,onDone}){
             );
           })}
         </div>
+        {!skipped&&(
+          <button onClick={skipSimulation} style={{
+            background:"rgba(255,255,255,0.07)",color:"#94A3B8",
+            border:"1px solid rgba(255,255,255,0.15)",
+            padding:"9px 16px",borderRadius:8,fontSize:12,fontWeight:600,
+            cursor:"pointer",width:"100%",
+          }}>⏩ Skip Simulasi</button>
+        )}
+        {skipped&&(
+          <div style={{textAlign:"center",fontSize:12,color:"#475569",padding:"8px"}}>Menghitung hasil...</div>
+        )}
       </div>
     );
   }
@@ -808,16 +951,22 @@ function SimulationView({ovr,opponents,lineup,onDone}){
         </div>
       </div>
 
-      {champ ? (
-        <button onClick={()=>onDone(fd)} style={{
-          background:"#003DA5",color:"#fff",border:"none",padding:"12px 18px",borderRadius:10,
-          fontSize:14,fontWeight:700,cursor:"pointer",width:"100%",
-        }}>{fd.stage<2?"Lanjut ke Stage Berikutnya →":"Lihat Hasil Akhir →"}</button>
-      ) : (
-        <button onClick={()=>onDone(fd)} style={{
-          background:"#7F1D1D",color:"#FCA5A5",border:"none",padding:"12px 18px",borderRadius:10,
-          fontSize:14,fontWeight:700,cursor:"pointer",width:"100%",
-        }}>Lihat Hasil →</button>
+      <div ref={bottomRef} style={{paddingTop:8}}>
+        {champ ? (
+          <button onClick={()=>{ window.scrollTo({top:0,behavior:"smooth"}); onDone(fd); }} style={{
+            background:"#003DA5",color:"#fff",border:"none",padding:"12px 18px",borderRadius:10,
+            fontSize:14,fontWeight:700,cursor:"pointer",width:"100%",
+          }}>{fd.stage<2?"Lanjut ke Stage Berikutnya →":"Lihat Hasil Akhir →"}</button>
+        ) : (
+          <button onClick={()=>{ window.scrollTo({top:0,behavior:"smooth"}); onDone(fd); }} style={{
+            background:"#7F1D1D",color:"#FCA5A5",border:"none",padding:"12px 18px",borderRadius:10,
+            fontSize:14,fontWeight:700,cursor:"pointer",width:"100%",
+          }}>Lihat Hasil →</button>
+        )}
+      </div>
+      {/* Floating scroll-down button — pill shape, centered, hides near bottom */}
+      {showScrollBtn&&(
+        <ScrollDownFloat targetRef={bottomRef} onHide={()=>setShowScrollBtn(false)}/>
       )}
     </div>
   );
@@ -891,7 +1040,30 @@ function RecruitPhase({stage, slots, excludedNames, onReplace, onSkip, recruitCa
 
   return(
     <div>
-      <GuideBox icon="🆕" title={`Rekrutan Baru — ${STAGE_NAMES[stage]}`}>
+      {/* Story-telling per stage transition */}
+        {stage===1&&(
+          <div style={{background:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.25)",borderRadius:12,padding:"16px 14px",marginBottom:12,textAlign:"center"}}>
+            <div style={{fontSize:32,marginBottom:8}}>🏆</div>
+            <div style={{fontSize:16,fontWeight:800,color:"#F59E0B",marginBottom:6}}>Juara Indonesia Super League!</div>
+            <div style={{fontSize:12,color:"#94A3B8",lineHeight:1.7,marginBottom:8}}>
+              Maung XI menaklukkan liga domestik dan membuktikan dominasi di tanah air.
+              Kini panggung Asia Tenggara menantimu di <strong style={{color:"#E2E8F0"}}>ASEAN Club Championship</strong>.
+            </div>
+            <div style={{fontSize:11,color:"#F59E0B",fontWeight:600}}>⚡ Rekrut 1 pemain baru untuk memperkuat tim sebelum melaju lebih jauh!</div>
+          </div>
+        )}
+        {stage===2&&(
+          <div style={{background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.25)",borderRadius:12,padding:"16px 14px",marginBottom:12,textAlign:"center"}}>
+            <div style={{fontSize:32,marginBottom:8}}>🌏</div>
+            <div style={{fontSize:16,fontWeight:800,color:"#22C55E",marginBottom:6}}>Juara ASEAN Club Championship!</div>
+            <div style={{fontSize:12,color:"#94A3B8",lineHeight:1.7,marginBottom:8}}>
+              Maung XI mengangkat trofi ASEAN dan mengharumkan nama Indonesia di kancah regional.
+              Kini satu tantangan terbesar menanti — <strong style={{color:"#E2E8F0"}}>AFC Champions League Elite</strong> melawan raksasa Asia.
+            </div>
+            <div style={{fontSize:11,color:"#22C55E",fontWeight:600}}>⚡ Perkuat tim dengan satu rekrutan terbaik sebelum bertarung di level tertinggi!</div>
+          </div>
+        )}
+        <GuideBox icon="🆕" title={`Rekrutan Baru — ${STAGE_NAMES[stage]}`}>
         Kamu mendapat 1 kesempatan rekrut pemain baru. Klik <strong style={{color:"#60A5FA"}}>Roll Rekrutan</strong> untuk reveal.
         Pemain hanya bisa ditempatkan sesuai posisi naturalnya. Re-roll tersisa: <strong style={{color:"#F59E0B"}}>{rerollLeft}x</strong>
       </GuideBox>
@@ -1008,24 +1180,24 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
 
   const SCENARIOS = {
     lost1: {
-      emoji:"😞", title:"Tidak Berhasil Lolos", sub:"Tersandung di Liga Lokal",
+      emoji:"😡", title:"Gagal Total!", sub:"Tersandung di Liga Lokal",
       color:"#EF4444", bg:"rgba(239,68,68,0.08)", border:"rgba(239,68,68,0.25)",
-      msg:"Perjalanan terhenti di Liga Indonesia. Tim ini butuh lebih banyak keseimbangan dan kekuatan untuk bersaing. Coba lagi — Persib ada di hati!",
+      msg:"Maung XI bahkan belum sempat menunjukkan tajinya ke Asia. Tim ini perlu lebih banyak keseimbangan dan kekuatan. Coba lagi — jangan menyerah!",
     },
     lost2: {
-      emoji:"😤", title:"Hampir Sampai!", sub:"Juara Lokal, Tumbang di ASEAN",
+      emoji:"😤", title:"Nyaris, Tapi Belum Cukup!", sub:"Juara Lokal, Tumbang di ASEAN",
       color:"#F97316", bg:"rgba(249,115,22,0.08)", border:"rgba(249,115,22,0.25)",
-      msg:"Dominan di Liga Indonesia tapi ASEAN terlalu berat. Tim butuh upgrade di stage 2. Titip salam buat klub-klub tetangga!",
+      msg:"Maung XI sudah buktikan dominasi di kandang, tapi ASEAN punya cerita lain. Selangkah lagi — draft ulang, pilih lebih cermat, dan balik lebih ganas!",
     },
     lost3: {
-      emoji:"😭", title:"Begitu Dekat!", sub:"Juara ASEAN, Gagal di Asia",
+      emoji:"🥹", title:"Selangkah Lagi Sejarah!", sub:"Dua Trofi, Gagal di Gerbang Asia",
       color:"#F59E0B", bg:"rgba(245,158,11,0.08)", border:"rgba(245,158,11,0.25)",
-      msg:"Menakjubkan! Persib tembus AFC tapi Asia terlalu kejam. Satu level lagi — lineup terkuat Persib pasti bisa!",
+      msg:"Maung XI sudah melangkah jauh melewati dua kompetisi, tapi raksasa Asia terlalu tangguh kali ini. Kamu hampir bikin sejarah — satu langkah lagi!",
     },
     all: {
       emoji:"🏆", title:"Maung Taklukkan Asia!", sub:"Juara 3 Kompetisi · Sejarah Tercipta",
       color:"#F59E0B", bg:"rgba(245,158,11,0.08)", border:"rgba(245,158,11,0.35)",
-      msg:"LUAR BIASA! Persib dream team menaklukkan Liga Indonesia, ASEAN, dan AFC Champions League Elite. Ini bukan mimpi — ini Maung Eleven!",
+      msg:"LUAR BIASA! Maung XI menaklukkan Liga Indonesia, ASEAN, dan AFC Champions League Elite. Ini bukan mimpi — ini Maung Eleven!",
     },
   };
 
@@ -1140,16 +1312,26 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
         <Pitch formation={formation} slots={slots} readonly/>
       </div>
 
-      {/* Action buttons */}
-      <div style={{display:"flex",gap:8,marginBottom:8}}>
+      {/* Spacer for floating buttons */}
+      <div style={{height:80}}/>
+      {/* Floating action buttons */}
+      <div style={{
+        position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
+        width:"100%",maxWidth:600,
+        background:"linear-gradient(to top, #070D1A 70%, transparent)",
+        padding:"16px 16px 20px",zIndex:40,
+        display:"flex",gap:8,
+      }}>
         <button onClick={()=>setShowShare(true)} style={{
-          flex:1,background:"#003DA5",color:"#fff",border:"none",padding:"12px",
-          borderRadius:10,fontSize:14,fontWeight:700,cursor:"pointer",display:"flex",
+          flex:2,background:"#003DA5",color:"#fff",border:"none",padding:"13px",
+          borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer",display:"flex",
           alignItems:"center",justifyContent:"center",gap:6,
-        }}>📤 Bagikan</button>
+          boxShadow:"0 4px 20px rgba(0,61,165,0.5)",
+        }}>📥 Download Poster Hasil Lengkap</button>
         <button onClick={onRestart} style={{
-          flex:1,background:"transparent",color:"#94A3B8",border:"1px solid rgba(255,255,255,0.12)",
-          padding:"12px",borderRadius:10,fontSize:14,fontWeight:600,cursor:"pointer",
+          flex:1,background:"rgba(255,255,255,0.06)",color:"#94A3B8",
+          border:"1px solid rgba(255,255,255,0.12)",
+          padding:"13px",borderRadius:10,fontSize:13,fontWeight:600,cursor:"pointer",
         }}>Main Lagi</button>
       </div>
 
@@ -1171,16 +1353,27 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
               <TigerBadge size={32}/>
               <div>
                 <div style={{fontSize:14,fontWeight:800,color:"#fff"}}>Maung Eleven</div>
-                <div style={{fontSize:10,color:"#475569"}}>{managerName?`Manajer: ${managerName}`:"Persib All-Time Dream Team"}</div>
+                <div style={{fontSize:10,color:"#475569"}}>Persib All-Time Dream Team</div>
               </div>
               <div style={{marginLeft:"auto",fontSize:22}}>{sc.emoji}</div>
             </div>
 
             {/* Result headline */}
-            <div style={{textAlign:"center",marginBottom:16}}>
-              <div style={{fontSize:22,fontWeight:800,color:sc.color,marginBottom:2}}>{sc.title}</div>
+            <div style={{textAlign:"center",marginBottom:12}}>
+              <div style={{fontSize:16,marginBottom:4}}>
+                {Array.from({length:stagesWon}).map((_,i)=><span key={i}>⭐</span>)}
+                {stagesWon===0&&<span style={{fontSize:14}}>💔</span>}
+              </div>
+              <div style={{fontSize:20,fontWeight:800,color:sc.color,marginBottom:2}}>{sc.title}</div>
               <div style={{fontSize:11,color:"#64748B"}}>{sc.sub}</div>
             </div>
+
+            {/* Manager name above W-D-L */}
+            {managerName&&(
+              <div style={{textAlign:"center",marginBottom:10}}>
+                <div style={{fontSize:13,fontWeight:700,color:"#38BDF8"}}>⚽ Manajer: {managerName}</div>
+              </div>
+            )}
 
             {/* W-D-L big numbers */}
             {stageResults.length > 0 && (()=>{
@@ -1293,7 +1486,13 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
 
 export default function MaungEleven(){
   const [phase,setPhase]=useState("name"); // name|formation|draft|simulate|recruit|done
-  const [managerName,setManagerName]=useState("");
+  const [managerName,setManagerName]=useState(()=>{
+    try{ return localStorage.getItem("maung_manager")||""; }catch(e){ return ""; }
+  });
+  const saveManagerName = (name) => {
+    setManagerName(name);
+    try{ localStorage.setItem("maung_manager", name); }catch(e){}
+  };
   const [formation,setFormation]=useState(null);
   const [slots,setSlots]=useState([]);
   const [activeSlot,setActiveSlot]=useState(null);
@@ -1433,7 +1632,7 @@ export default function MaungEleven(){
   }
 
   function restart(){
-    setPhase("name");setManagerName("");setFormation(null);setSlots([]);setActiveSlot(null);
+    setPhase("name");// managerName persists via localStoragesetFormation(null);setSlots([]);setActiveSlot(null);
     setCards(null);setCardPhase("idle");setSelectedCard(null);setStage(0);
     setStageResults([]);setRerollLeft(1);setRecruitCard(null);setRecruitPhase("idle");
   }
@@ -1443,6 +1642,7 @@ export default function MaungEleven(){
     @keyframes tierPop{0%{opacity:0;transform:scale(0.3) rotate(-12deg)}65%{transform:scale(1.15) rotate(3deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
     @keyframes nameSlide{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
     *{box-sizing:border-box;margin:0;padding:0}
     .me{font-family:'Inter',sans-serif;background:#070D1A;color:#E2E8F0;border-radius:16px;overflow:hidden;min-height:100dvh}
     body{background:#040810;margin:0}
@@ -1458,29 +1658,48 @@ export default function MaungEleven(){
     <div className="me" style={{maxWidth:600,margin:"0 auto"}}>
       <style>{css}</style>
       {/* Header */}
-      <div style={{background:"#0D1B35",padding:"14px 18px",borderBottom:"1px solid rgba(255,255,255,0.07)",display:"flex",alignItems:"center",gap:12}}>
-        <TigerBadge size={36}/>
-        <div>
-          <div style={{fontSize:16,fontWeight:800,color:"#fff",letterSpacing:-0.5}}>Maung Eleven</div>
-          <div style={{fontSize:11,color:"#475569"}}>Persib all-time dream team</div>
-        </div>
-        {(phase==="draft")&&ovr>0&&(
-          <div style={{marginLeft:"auto",textAlign:"right"}}>
-            <div style={{fontSize:20,fontWeight:800,color:"#3B82F6"}}>{ovr}</div>
-            <div style={{fontSize:9,color:"#475569",textTransform:"uppercase",letterSpacing:1}}>OVR</div>
+      <div style={{background:"#0D1B35",borderBottom:"1px solid rgba(255,255,255,0.07)"}}>
+        <div style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12}}>
+          <TigerBadge size={36}/>
+          <div>
+            <div style={{fontSize:16,fontWeight:800,color:"#fff",letterSpacing:-0.5}}>Maung Eleven</div>
+            <div style={{fontSize:11,color:"#475569"}}>Persib all-time dream team</div>
           </div>
-        )}
+          {(phase==="draft")&&ovr>0&&(
+            <div style={{marginLeft:"auto",textAlign:"right"}}>
+              <div style={{fontSize:20,fontWeight:800,color:"#3B82F6"}}>{ovr}</div>
+              <div style={{fontSize:9,color:"#475569",textTransform:"uppercase",letterSpacing:1}}>OVR</div>
+            </div>
+          )}
+        </div>
+        {/* Version ticker — landing page only */}
+        {phase==="name"&&<div style={{background:"#fff",borderTop:"1px solid rgba(255,255,255,0.04)",padding:"5px 18px",display:"flex",alignItems:"center",gap:8,overflow:"hidden"}}>
+          <div style={{fontSize:10,fontWeight:700,color:"#003DA5",whiteSpace:"nowrap",flexShrink:0}}>Versi 2.0 telah aktif!</div>
+          <div style={{width:1,height:12,background:"rgba(0,0,0,0.15)",flexShrink:0}}/>
+          <div style={{overflow:"hidden",flex:1}}>
+            <div style={{
+              fontSize:10,color:"#64748B",whiteSpace:"nowrap",
+              animation:"ticker 18s linear infinite",
+              display:"inline-block",
+            }}>
+              {/* Duplicate text for seamless looping */}
+              {"Total 180 Pemain Tersedia  ·  Tambahan Formasi Baru  ·  Youth Lebih Banyak  ·  Bisa Skip Simulasi  ·  Pembaruan Data & Rating Pemain  ·     Total 180 Pemain Tersedia  ·  Tambahan Formasi Baru  ·  Youth Lebih Banyak  ·  Bisa Skip Simulasi  ·  Pembaruan Data & Rating Pemain  ·    "}
+            </div>
+          </div>
+        </div>}
       </div>
       {/* Stage bar */}
       <div style={{display:"flex",background:"#050A14",borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
         {STAGE_NAMES.map((n,i)=>{
-          const done=i<stage||(phase==="done");
+          // A stage is "done with checkmark" only if that stage was actually WON
+          const stageResult = stageResults[i];
+          const wonThisStage = stageResult && stageResult.position === 1;
           const active=(i===stage)&&(phase==="draft"||phase==="simulate"||phase==="recruit");
           return(
             <div key={i} style={{flex:1,padding:"8px 4px",textAlign:"center",fontSize:10,fontWeight:600,
-              color:done?"#22C55E":active?"#3B82F6":"#334155",
-              borderBottom:active?"2px solid #3B82F6":done?"2px solid #22C55E":"2px solid transparent"}}>
-              {done?"✓ ":""}{n}
+              color:wonThisStage?"#22C55E":active?"#3B82F6":"#334155",
+              borderBottom:active?"2px solid #3B82F6":wonThisStage?"2px solid #22C55E":"2px solid transparent"}}>
+              {wonThisStage?"✓ ":""}{n}
             </div>
           );
         })}
@@ -1502,9 +1721,37 @@ export default function MaungEleven(){
                 tiga kompetisi: <span style={{color:"#E2E8F0",fontWeight:600}}>Liga Indonesia</span>,{" "}
                 <span style={{color:"#E2E8F0",fontWeight:600}}>ASEAN Club Championship</span>, hingga{" "}
                 <span style={{color:"#E2E8F0",fontWeight:600}}>AFC Champions League Elite</span>.
-                Hanya juara yang boleh lanjut.
               </div>
             </div>
+
+            {/* Showcase cards — Silver, Gold, Legenda */}
+            {(()=>{
+              const showcase = [
+                PLAYERS.find(p=>p.name==="Abanda Herman"),
+                PLAYERS.find(p=>p.name==="Ciro Alves"),
+                PLAYERS.find(p=>p.name==="Robby Darwis"),
+              ].filter(Boolean);
+              return(
+                <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:14}}>
+                  {showcase.map(p=>{
+                    const tc=TIER_COLOR[p.tier], tg=TIER_GLOW[p.tier], tb=TIER_BG[p.tier];
+                    const cc=CAT_COLOR[getPosCategory(p.pos[0])];
+                    return(
+                      <div key={p.name} style={{
+                        background:tb,border:`1.5px solid ${tc}`,borderRadius:10,
+                        padding:"8px 6px",textAlign:"center",width:90,flexShrink:0,
+                        boxShadow:`0 3px 10px ${tg}`,
+                      }}>
+                        <div style={{fontSize:8,fontWeight:800,color:tc,letterSpacing:1.5,textTransform:"uppercase",marginBottom:3}}>{p.tier}</div>
+                        <div style={{fontSize:22,fontWeight:800,color:tc,lineHeight:1,marginBottom:4,textShadow:`0 0 10px ${tg}`}}>{p.rating}</div>
+                        <div style={{fontSize:9,fontWeight:700,color:"#F1F5F9",marginBottom:4,lineHeight:1.2}}>{p.name}</div>
+                        <span style={{fontSize:8,fontWeight:700,color:cc,background:`${cc}18`,padding:"1px 5px",borderRadius:20}}>{p.pos[0]}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
 
             {/* Key mechanics pills */}
             <div style={{display:"flex",flexWrap:"wrap",gap:5,justifyContent:"center",marginBottom:14}}>
@@ -1534,7 +1781,7 @@ export default function MaungEleven(){
                 type="text"
                 maxLength={15}
                 value={managerName}
-                onChange={e=>setManagerName(e.target.value.slice(0,15))}
+                onChange={e=>saveManagerName(e.target.value.slice(0,15))}
                 placeholder="Masukkan nama (maks 15 karakter)"
                 style={{
                   width:"100%",background:"#060B14",border:"1px solid rgba(255,255,255,0.12)",
