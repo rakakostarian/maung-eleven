@@ -6,8 +6,8 @@ function track(eventName, params={}){
 }
 
 // ── SUPABASE LEADERBOARD ──────────────────────────────────────────────────────
-const SUPA_URL = (typeof process !== 'undefined' && process.env?.REACT_APP_SUPABASE_URL) || null;
-const SUPA_KEY = (typeof process !== 'undefined' && process.env?.REACT_APP_SUPABASE_KEY) || null;
+const SUPA_URL = (typeof process !== 'undefined' && process.env?.REACT_APP_SUPABASE_URL) || "https://rhzkatnrlvkovcfwjoum.supabase.co";
+const SUPA_KEY = (typeof process !== 'undefined' && process.env?.REACT_APP_SUPABASE_KEY) || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoemthdG5ybHZrb3ZjZndqb3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NTM4NjksImV4cCI6MjA5NzAyOTg2OX0.xHF8XYZbMMIK3HEKVsgHADGvgoPaLHzXawVWkTDOJGo";
 
 async function supaFetch(path, opts={}){
   if(!SUPA_URL||!SUPA_KEY) return null;
