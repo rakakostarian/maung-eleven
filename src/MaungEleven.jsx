@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
+// ── GA4 EVENT TRACKING ────────────────────────────────────────────────────────
+function track(eventName, params={}){
+  try{ window.gtag?.('event', eventName, params); }catch(e){}
+}
+
 // ── RESPONSIVE HOOK ───────────────────────────────────────────────────────────
 function useIsMobile(){ 
   const [m,setM]=useState(window.innerWidth<600);
@@ -745,6 +750,7 @@ function SimulationView({ovr,opponents,lineup,onDone}){
     if(store.current.done) return;
     clearInterval(ivRef.current);
     setSkipped(true);
+    track('simulation_skipped', {stage: store.current.finalData?.stage+1||1});
     store.current.shown = store.current.allMatches;
     setTimeout(()=>{
       store.current.done = true;
@@ -953,12 +959,22 @@ function SimulationView({ovr,opponents,lineup,onDone}){
 
       <div ref={bottomRef} style={{paddingTop:8}}>
         {champ ? (
-          <button onClick={()=>{ window.scrollTo({top:0,behavior:"smooth"}); onDone(fd); }} style={{
+          <button onClick={()=>{
+            track('stage_completed', {stage: fd.stage+1, won: true, position: fd.position, pts: fd.pts});
+            track('stage_result', {stage: fd.stage+1, won: true, position: fd.position});
+            window.scrollTo({top:0,behavior:"smooth"});
+            onDone(fd);
+          }} style={{
             background:"#003DA5",color:"#fff",border:"none",padding:"12px 18px",borderRadius:10,
             fontSize:14,fontWeight:700,cursor:"pointer",width:"100%",
           }}>{fd.stage<2?"Lanjut ke Stage Berikutnya →":"Lihat Hasil Akhir →"}</button>
         ) : (
-          <button onClick={()=>{ window.scrollTo({top:0,behavior:"smooth"}); onDone(fd); }} style={{
+          <button onClick={()=>{
+            track('stage_completed', {stage: fd.stage+1, won: false, position: fd.position, pts: fd.pts});
+            track('stage_result', {stage: fd.stage+1, won: false, position: fd.position});
+            window.scrollTo({top:0,behavior:"smooth"});
+            onDone(fd);
+          }} style={{
             background:"#7F1D1D",color:"#FCA5A5",border:"none",padding:"12px 18px",borderRadius:10,
             fontSize:14,fontWeight:700,cursor:"pointer",width:"100%",
           }}>Lihat Hasil →</button>
@@ -1020,6 +1036,7 @@ function RecruitPhase({stage, slots, excludedNames, onReplace, onSkip, recruitCa
   function doReroll(){
     if(rerollLeft<=0) return;
     setRerollLeft(r=>r-1);
+    track('recruit_rerolled', {stage});
     setCardState("spinning");
     setDisplayCard({tierVisible:false, playerVisible:false, tier:"Silver", player:null});
     setTimeout(()=>{
@@ -1169,7 +1186,17 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
   const lastResult = stageResults[stageResults.length-1];
   const lastStage = lastResult?.stage ?? 0;
   const allWon = stagesWon === 3;
-  const lostAt = stageResults.findIndex(r=>r.position!==1); // -1 if never lost
+  const lostAt = stageResults.findIndex(r=>r.position!==1);
+
+  // Track final result
+  useEffect(()=>{
+    const scenario = allWon?"all":lastStage===0?"lost1":lastStage===1?"lost2":"lost3";
+    track('game_completed', {scenario, stages_won: stagesWon});
+    track('final_result', {scenario, stages_won: stagesWon, manager: managerName||"anonymous"});
+    // Youth chemistry tracking
+    const youthCount = slots.filter(s=>s.player?.type==="Youth").length;
+    if(youthCount>=3) track('youth_chemistry_triggered', {youth_count: youthCount, bonus: youthCount>=5?6:3});
+  },[]); // -1 if never lost
 
   // Scenario detection
   const scenario =
@@ -1228,6 +1255,7 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
         a.download='maung-eleven-result.png';
         a.href=canvas.toDataURL('image/png');
         a.click();
+        track('poster_downloaded', {manager: managerName||'anonymous'});
       }).catch(()=>alert("Screenshot gagal, gunakan screenshot manual."));
     }
     if(window.html2canvas){ doCapture(); }
@@ -1510,6 +1538,17 @@ export default function MaungEleven(){
   const excludedNames=filledSlots.map(s=>s.player.name);
   const ovr=allFilled?calcOVR(slots):0;
   const latestResult=stageResults[stageResults.length-1];
+
+  // ── GA4 TRACKING ──
+  useEffect(()=>{ track('landing_page_viewed'); },[]);
+
+  useEffect(()=>{
+    if(allFilled && phase==="draft") track('draft_completed', {stage: stage+1});
+  },[allFilled]);
+
+  useEffect(()=>{
+    if(phase==="simulate") track('simulation_started', {stage: stage+1});
+  },[phase]);
 
   function startFormation(f){
     const sl=FORMATIONS[f].slots.map((pos,i)=>({id:i,pos,player:null}));
