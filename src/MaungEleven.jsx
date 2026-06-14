@@ -5,6 +5,67 @@ function track(eventName, params={}){
   try{ window.gtag?.('event', eventName, params); }catch(e){}
 }
 
+// ── SUPABASE LEADERBOARD ──────────────────────────────────────────────────────
+const SUPA_URL = (typeof process !== 'undefined' && process.env?.REACT_APP_SUPABASE_URL) || null;
+const SUPA_KEY = (typeof process !== 'undefined' && process.env?.REACT_APP_SUPABASE_KEY) || null;
+
+async function supaFetch(path, opts={}){
+  if(!SUPA_URL||!SUPA_KEY) return null;
+  try{
+    const res = await fetch(`${SUPA_URL}/rest/v1${path}`, {
+      headers:{
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': opts.prefer||'',
+      },
+      ...opts,
+    });
+    if(!res.ok) return null;
+    const text = await res.text();
+    return text ? JSON.parse(text) : [];
+  }catch(e){ return null; }
+}
+
+function timeAgo(dateStr){
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff/60000);
+  const hrs  = Math.floor(diff/3600000);
+  const days = Math.floor(diff/86400000);
+  if(mins < 60) return `${mins} menit lalu`;
+  if(hrs  < 24) return `${hrs} jam lalu`;
+  if(days === 1) return "Kemarin";
+  const d = new Date(dateStr);
+  return `${d.getDate()} ${["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"][d.getMonth()]}`;
+}
+
+async function submitScore({manager, pts, ovr, wins, scenario, stages_won}){
+  // Basic validation
+  if(!manager||manager.trim()==="") return;
+  if(pts>306||pts<0) return;
+  if(ovr>100||ovr<0) return;
+  if(wins>102||wins<0) return;
+  if(stages_won<1) return; // hanya yang menang min 1 stage
+
+  await supaFetch('/Leaderboard', {
+    method:'POST',
+    prefer:'return=minimal',
+    body: JSON.stringify({
+      manager: manager.trim().slice(0,15),
+      pts, ovr, wins,
+      scenario: scenario||'unknown',
+      stages_won,
+    }),
+  });
+}
+
+async function fetchLeaderboard(orderBy='pts', limit=10){
+  const data = await supaFetch(
+    `/Leaderboard?select=manager,pts,ovr,wins,stages_won,created_at&order=${orderBy}.desc&limit=${limit}`
+  );
+  return data||[];
+}
+
 // ── RESPONSIVE HOOK ───────────────────────────────────────────────────────────
 function useIsMobile(){ 
   const [m,setM]=useState(window.innerWidth<600);
@@ -670,6 +731,82 @@ function GuideBox({icon,title,children}){
 
 // ── SIMULATION VIEW ───────────────────────────────────────────────────────────
 
+
+// ── LEADERBOARD COMPONENT ─────────────────────────────────────────────────────
+function Leaderboard({managerName="", compact=false}){
+  const [tab, setTab] = useState('pts');
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(()=>{
+    setLoading(true);
+    fetchLeaderboard(tab, 10).then(d=>{ setData(d); setLoading(false); });
+  },[tab]);
+
+  const tabs = [
+    {key:'pts',  label:'Poin'},
+    {key:'ovr',  label:'OVR'},
+    {key:'wins', label:'Kemenangan'},
+  ];
+
+  const valKey = tab;
+  const valLabel = tab==='pts'?'pts':tab==='ovr'?'ovr':'menang';
+
+  return(
+    <div style={{background:"#0D1828",borderRadius:12,overflow:"hidden",marginBottom:compact?0:14}}>
+      {/* Header */}
+      <div style={{padding:"10px 14px",borderBottom:"1px solid rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{fontSize:12,fontWeight:700,color:"#E2E8F0"}}>🏅 Leaderboard</div>
+        <div style={{display:"flex",gap:4}}>
+          {tabs.map(t=>(
+            <button key={t.key} onClick={()=>setTab(t.key)} style={{
+              background:tab===t.key?"#003DA5":"transparent",
+              color:tab===t.key?"#fff":"#475569",
+              border:`1px solid ${tab===t.key?"#003DA5":"rgba(255,255,255,0.08)"}`,
+              padding:"3px 9px",borderRadius:20,fontSize:10,fontWeight:600,cursor:"pointer",
+            }}>{t.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Table */}
+      <div style={{padding:"0"}}>
+        {loading?(
+          <div style={{textAlign:"center",padding:"20px",fontSize:11,color:"#334155"}}>Memuat...</div>
+        ):data.length===0?(
+          <div style={{textAlign:"center",padding:"20px",fontSize:11,color:"#334155"}}>Belum ada data. Jadilah yang pertama!</div>
+        ):(
+          data.map((row,i)=>{
+            const isMe = managerName && row.manager?.toLowerCase()===managerName.toLowerCase();
+            const medals = ["🥇","🥈","🥉"];
+            return(
+              <div key={i} style={{
+                display:"flex",alignItems:"center",padding:"8px 14px",
+                borderBottom:"1px solid rgba(255,255,255,0.04)",
+                background:isMe?"rgba(0,61,165,0.15)":"transparent",
+              }}>
+                <div style={{width:24,fontSize:i<3?14:11,fontWeight:700,color:i<3?"#F59E0B":"#334155",flexShrink:0}}>
+                  {i<3?medals[i]:`${i+1}`}
+                </div>
+                <div style={{flex:1,fontSize:11,fontWeight:isMe?700:400,color:isMe?"#60A5FA":"#CBD5E1",
+                  whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                  {row.manager}{isMe?" (kamu)":""}
+                </div>
+                <div style={{fontSize:12,fontWeight:700,color:i===0?"#F59E0B":i===1?"#94A3B8":i===2?"#CD7F32":"#475569",marginRight:8}}>
+                  {tab==='ovr'?row.ovr?.toFixed(1):row[valKey]}
+                </div>
+                <div style={{fontSize:9,color:"#334155",flexShrink:0,minWidth:60,textAlign:"right"}}>
+                  {timeAgo(row.created_at)}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── SCROLL DOWN FLOAT ─────────────────────────────────────────────────────────
 function ScrollDownFloat({targetRef, onHide}){
   const [visible, setVisible] = useState(true);
@@ -1188,14 +1325,28 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
   const allWon = stagesWon === 3;
   const lostAt = stageResults.findIndex(r=>r.position!==1);
 
-  // Track final result
+  // Track final result + submit to leaderboard
   useEffect(()=>{
     const scenario = allWon?"all":lastStage===0?"lost1":lastStage===1?"lost2":"lost3";
     track('game_completed', {scenario, stages_won: stagesWon});
     track('final_result', {scenario, stages_won: stagesWon, manager: managerName||"anonymous"});
-    // Youth chemistry tracking
     const youthCount = slots.filter(s=>s.player?.type==="Youth").length;
     if(youthCount>=3) track('youth_chemistry_triggered', {youth_count: youthCount, bonus: youthCount>=5?6:3});
+
+    // Submit to Supabase leaderboard
+    if(stagesWon>=1){
+      const totPts  = stageResults.reduce((a,r)=>a+(r.pts||0),0);
+      const totWins = stageResults.reduce((a,r)=>a+(r.W||0),0);
+      const finalOvr = stageResults[stageResults.length-1]?.ovr||0;
+      submitScore({
+        manager: managerName||"Anonymous",
+        pts: totPts,
+        ovr: finalOvr,
+        wins: totWins,
+        scenario,
+        stages_won: stagesWon,
+      });
+    }
   },[]); // -1 if never lost
 
   // Scenario detection
@@ -1339,6 +1490,9 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
         <div style={{fontSize:11,fontWeight:700,color:"#475569",textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>Lineup Akhir</div>
         <Pitch formation={formation} slots={slots} readonly/>
       </div>
+
+      {/* Leaderboard */}
+      <Leaderboard managerName={managerName}/>
 
       {/* Spacer for floating buttons */}
       <div style={{height:80}}/>
@@ -1837,6 +1991,11 @@ export default function MaungEleven(){
             >
               {managerName.trim()?`Siap, ${managerName.trim()}! Pilih Formasi →`:"Masukkan nama dulu"}
             </button>
+
+            {/* Leaderboard preview on landing */}
+            <div style={{marginTop:16}}>
+              <Leaderboard managerName={managerName} compact/>
+            </div>
           </div>
         )}
 
