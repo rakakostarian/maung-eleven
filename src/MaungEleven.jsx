@@ -1,5 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
+// ── BREAKPOINT HOOK ──────────────────────────────────────────────────────────
+function useBreakpoint(){
+  const get = () => window.innerWidth >= 1024 ? 'desktop' : 'mobile';
+  const [bp, setBp] = useState(get);
+  useEffect(()=>{
+    const fn = () => setBp(get());
+    window.addEventListener('resize', fn);
+    return () => window.removeEventListener('resize', fn);
+  }, []);
+  return bp;
+}
+
 // ── GA4 EVENT TRACKING ────────────────────────────────────────────────────────
 function track(eventName, params={}){
   try{ window.gtag?.('event', eventName, params); }catch(e){}
@@ -363,79 +375,119 @@ function calcOVR(slots){
 }
 
 // Full season simulation with stats
+
+// Normalized key score — overperformance relative to position expectation
+function keyScore(stat){
+  const saves    = stat.saves    || 0;
+  const tackles  = stat.tackles  || 0;
+  const keypasses= stat.keypasses|| 0;
+  const shots    = stat.shots    || 0;
+  // Score = value / expected × 100, pick the highest scoring category
+  const scores = [
+    {label:"Key Player", unit:"saves",    val:saves,     score: saves    / 65 * 100},
+    {label:"Key Player", unit:"tackles",  val:tackles,   score: tackles  / 35 * 100},
+    {label:"Key Player", unit:"key pass", val:keypasses, score: keypasses/ 22 * 100},
+    {label:"Key Player", unit:"shots",    val:shots,     score: shots    / 45 * 100},
+  ].filter(s=>s.val>0);
+  if(!scores.length) return {label:"Key Player", unit:"", val:0, score:0};
+  return scores.sort((a,b)=>b.score-a.score)[0];
+}
 function simulateFullSeason(ovr, opponents, lineup){
-  // Build home+away fixture list (17 opponents × 2 = 34)
   const fixtures = [];
   opponents.forEach(opp=>{ fixtures.push({...opp,home:true}); fixtures.push({...opp,home:false}); });
   const shuffled = shuffle(fixtures).slice(0,34);
 
-  // Player goal/assist/save distributions
-  const fwds  = lineup.filter(s=>FWD_POS.includes(s.pos)&&s.player).map(s=>s.player);
-  const mids  = lineup.filter(s=>MID_POS.includes(s.pos)&&s.player).map(s=>s.player);
-  const defs  = lineup.filter(s=>DEF_POS.includes(s.pos)&&s.player).map(s=>s.player);
-  const gk    = lineup.find(s=>s.pos==="GK"&&s.player)?.player;
+  const fwds = lineup.filter(s=>FWD_POS.includes(s.pos)&&s.player).map(s=>s.player);
+  const mids = lineup.filter(s=>MID_POS.includes(s.pos)&&s.player).map(s=>s.player);
+  const defs = lineup.filter(s=>DEF_POS.includes(s.pos)&&s.player).map(s=>s.player);
+  const gk   = lineup.find(s=>s.pos==="GK"&&s.player)?.player;
 
+  // Separate fields per position role
   const playerStats = {};
-  lineup.forEach(s=>{ if(s.player) playerStats[s.player.name]={goals:0,assists:0,saves:0}; });
+  lineup.forEach(s=>{
+    if(s.player) playerStats[s.player.name]={goals:0,assists:0,saves:0,tackles:0,keypasses:0,shots:0};
+  });
 
   const matchResults = [];
-  let W=0,D=0,L=0,pts=0,gf=0,ga=0,longestWin=0,curWin=0;
+  let gf=0,ga=0,longestWin=0,curWin=0;
   let biggestWin={margin:-99,desc:""}, highestScoring={total:-1,desc:""}, biggestLoss={margin:-99,desc:""};
 
   shuffled.forEach(opp=>{
-    const myBase=ovr+(opp.home?3:0)+(Math.random()-0.5)*20;
-    const oppBase=opp.rating+(opp.home?0:3)+(Math.random()-0.5)*20;
-    const diff=myBase-oppBase;
+    const myBase  = ovr+(opp.home?3:0)+(Math.random()-0.5)*18;
+    const oppBase = opp.rating+(opp.home?0:3)+(Math.random()-0.5)*18;
+    const diff    = myBase-oppBase;
 
-    let myGoals,oppGoals;
-    if(diff>10){ myGoals=rnd(2,5); oppGoals=rnd(0,1); W++;pts+=3;curWin++;longestWin=Math.max(longestWin,curWin); }
-    else if(diff>=0){
-      myGoals=rnd(1,3); oppGoals=rnd(1,3);
-      if(myGoals===oppGoals){D++;pts+=1;curWin=0;}
-      else if(myGoals>oppGoals){W++;pts+=3;curWin++;longestWin=Math.max(longestWin,curWin);}
-      else{L++;curWin=0;}
-    }
-    else{ myGoals=rnd(0,2); oppGoals=rnd(1,4); L++;curWin=0; }
+    // ── Goals per match — turunkan batas atas ──
+    let myGoals, oppGoals;
+    if(diff>12){      myGoals=rnd(1,3); oppGoals=rnd(0,1); }
+    else if(diff>=0){ myGoals=rnd(0,2); oppGoals=rnd(0,2); }
+    else{             myGoals=rnd(0,1); oppGoals=rnd(1,3); }
     gf+=myGoals; ga+=oppGoals;
 
-    // Distribute goals — FWD 65%, MID 25%, DEF 10%, GK 0%
+    const result = myGoals>oppGoals?"W":myGoals===oppGoals?"D":"L";
+
+    // ── FWD: Shots first, then goals as subset ──
+    // Each FWD gets shots per match (3–6), then conversion rate
+    fwds.forEach(f=>{
+      if(!playerStats[f.name]) return;
+      const shotsThisMatch = rnd(1,3);
+      playerStats[f.name].shots += shotsThisMatch;
+    });
+
+    // Distribute goals — FWD gets goals FROM their shots (conversion ~20-35%)
+    // Cap per FWD: max goals = shots for that player
     for(let g=0;g<myGoals;g++){
       const r=Math.random();
       let scorer=null;
-      if(r<0.65&&fwds.length) scorer=fwds[Math.floor(Math.random()*fwds.length)];
-      else if(r<0.90&&mids.length) scorer=mids[Math.floor(Math.random()*mids.length)];
+      if(r<0.60&&fwds.length){
+        // Pick FWD weighted — ensure goals never exceed shots
+        const eligible = fwds.filter(f=>playerStats[f.name]&&
+          playerStats[f.name].goals < playerStats[f.name].shots);
+        if(eligible.length) scorer=eligible[Math.floor(Math.random()*eligible.length)];
+        else if(fwds.length) scorer=fwds[Math.floor(Math.random()*fwds.length)];
+      }
+      else if(r<0.85&&mids.length) scorer=mids[Math.floor(Math.random()*mids.length)];
       else if(defs.length) scorer=defs[Math.floor(Math.random()*defs.length)];
-      // GK never scores — fallback to fwd if scorer still null
       if(!scorer&&fwds.length) scorer=fwds[Math.floor(Math.random()*fwds.length)];
       if(scorer&&playerStats[scorer.name]) playerStats[scorer.name].goals++;
-      // Assist — MID 55%, FWD 30%, DEF 15%, GK 0% (impossible)
+    }
+
+    // ── MID: Key passes first, assists as subset ──
+    // Each MID gets key passes per match (1–4)
+    mids.forEach(m=>{
+      if(!playerStats[m.name]) return;
+      if(Math.random()<0.65) playerStats[m.name].keypasses += rnd(0,2);
+    });
+
+    // Distribute assists — MID 60%, FWD 25%, DEF 15%
+    // Constraint: assists <= keypasses for MID
+    for(let g=0;g<myGoals;g++){
       if(Math.random()<0.75){
         const ra=Math.random();
         let ast=null;
-        if(ra<0.55&&mids.length) ast=mids[Math.floor(Math.random()*mids.length)];
-        else if(ra<0.85&&fwds.length) ast=fwds.filter(p=>p!==scorer)[Math.floor(Math.random()*Math.max(1,fwds.filter(p=>p!==scorer).length))];
+        if(ra<0.60&&mids.length){
+          const eligible=mids.filter(m=>playerStats[m.name]&&
+            playerStats[m.name].assists < playerStats[m.name].keypasses);
+          if(eligible.length) ast=eligible[Math.floor(Math.random()*eligible.length)];
+          else if(mids.length) ast=mids[Math.floor(Math.random()*mids.length)];
+        }
+        else if(ra<0.85&&fwds.length){
+          ast=fwds.filter(p=>p!==null)[Math.floor(Math.random()*fwds.length)];
+        }
         else if(defs.length) ast=defs[Math.floor(Math.random()*defs.length)];
-        // GK intentionally excluded
-        if(ast&&playerStats[ast.name]&&ast!==scorer) playerStats[ast.name].assists++;
+        if(ast&&playerStats[ast.name]) playerStats[ast.name].assists++;
       }
     }
 
-    // KEY ACTIONS: GK=Saves, DEF=Tackles, MID=Interceptions, FWD=Shots
-    // GK saves
+    // ── GK: Saves (shots faced - goals conceded) ──
     if(gk&&playerStats[gk.name]){
-      playerStats[gk.name].saves+=rnd(0, Math.max(1, oppGoals+rnd(0,3)));
+      const shotsFaced = oppGoals + rnd(1,4); // goals + saved shots
+      playerStats[gk.name].saves += shotsFaced - oppGoals; // only saved shots
     }
-    // DEF tackles — proportional to danger
+
+    // ── DEF: Tackles per match (1–3 per defender) ──
     defs.forEach(d=>{
-      if(playerStats[d.name]) playerStats[d.name].saves+=rnd(0,3);
-    });
-    // MID interceptions — 1-2 per mid per game
-    mids.forEach(m=>{
-      if(Math.random()<0.5&&playerStats[m.name]) playerStats[m.name].saves+=rnd(0,2);
-    });
-    // FWD shots (not saves — track in same field as "key actions")
-    fwds.forEach(f=>{
-      if(Math.random()<0.7&&playerStats[f.name]) playerStats[f.name].saves+=rnd(1,3);
+      if(playerStats[d.name]) playerStats[d.name].tackles += rnd(0,2);
     });
 
     const margin=myGoals-oppGoals;
@@ -443,8 +495,19 @@ function simulateFullSeason(ovr, opponents, lineup){
     if(myGoals+oppGoals>highestScoring.total) highestScoring={total:myGoals+oppGoals,desc:`${myGoals}-${oppGoals} vs ${opp.name}`};
     if(oppGoals-myGoals>biggestLoss.margin) biggestLoss={margin:oppGoals-myGoals,desc:`${myGoals}-${oppGoals} vs ${opp.name}`};
 
-    matchResults.push({opp:opp.name,home:opp.home,myGoals,oppGoals,result:myGoals>oppGoals?"W":myGoals===oppGoals?"D":"L"});
+    matchResults.push({opp:opp.name,home:opp.home,myGoals,oppGoals,result});
   });
+
+  // ── W/D/L/pts computed from matchResults (single source of truth) ──
+  const W   = matchResults.filter(r=>r.result==="W").length;
+  const D   = matchResults.filter(r=>r.result==="D").length;
+  const L   = matchResults.filter(r=>r.result==="L").length;
+  const pts = W*3 + D;
+  longestWin = (()=>{
+    let cur=0,best=0;
+    matchResults.forEach(r=>{ if(r.result==="W"){cur++;best=Math.max(best,cur);}else cur=0; });
+    return best;
+  })();
 
   // Simulate other clubs for standings
   const otherClubs = opponents.map(opp=>{
@@ -455,16 +518,20 @@ function simulateFullSeason(ovr, opponents, lineup){
   const standings=[{name:"Maung XI",pts,isPlayer:true},...otherClubs].sort((a,b)=>b.pts-a.pts);
   const position=standings.findIndex(s=>s.isPlayer)+1;
 
-  // Awards
+  // Awards — use correct fields per position
   const statsArr=Object.entries(playerStats).map(([name,s])=>({name,...s}));
-  const topScorer=statsArr.sort((a,b)=>b.goals-a.goals)[0];
-  const topAssist=statsArr.sort((a,b)=>b.assists-a.assists)[0];
-  const topSave  =statsArr.sort((a,b)=>b.saves-a.saves)[0];
-  const pots     =statsArr.sort((a,b)=>(b.goals+b.assists)-(a.goals+a.assists))[0];
+  const topScorer =statsArr.slice().sort((a,b)=>b.goals-a.goals)[0];
+  const topAssist =statsArr.slice().sort((a,b)=>b.assists-a.assists)[0];
+  const topSave   =statsArr.slice().sort((a,b)=>keyScore(b).score-keyScore(a).score)[0];
+  const topTackle =statsArr.slice().sort((a,b)=>b.tackles-a.tackles)[0];
+  const topKeyPass=statsArr.slice().sort((a,b)=>b.keypasses-a.keypasses)[0];
+  const topShots  =statsArr.slice().sort((a,b)=>b.shots-a.shots)[0];
+  const pots      =statsArr.slice().sort((a,b)=>(b.goals+b.assists)-(a.goals+a.assists))[0];
   const cleanSheets=matchResults.filter(r=>r.oppGoals===0).length;
 
   return {W,D,L,pts,gf,ga,matchResults,playerStats,standings,position,
-    topScorer,topAssist,topSave,pots,cleanSheets,longestWin,biggestWin,highestScoring,biggestLoss};
+    topScorer,topAssist,topSave,topTackle,topKeyPass,topShots,
+    pots,cleanSheets,longestWin,biggestWin,highestScoring,biggestLoss};
 }
 
 
@@ -963,6 +1030,11 @@ function SimulationView({ovr,opponents,lineup,onDone}){
   const champ = fd.position===1;
   const safeMatches = Array.isArray(fd.matchResults) ? fd.matchResults : [];
   const safeStandings = Array.isArray(fd.standings) ? fd.standings : [];
+  // Recompute W/D/L from matchResults for display consistency
+  const fdW = safeMatches.filter(r=>r.result==="W").length;
+  const fdD = safeMatches.filter(r=>r.result==="D").length;
+  const fdL = safeMatches.filter(r=>r.result==="L").length;
+  const fdPts = fdW*3+fdD;
 
   return(
     <div>
@@ -975,11 +1047,11 @@ function SimulationView({ovr,opponents,lineup,onDone}){
         <div style={{fontSize:16,fontWeight:800,color:champ?"#F59E0B":"#60A5FA"}}>
           {champ?"JUARA!":fd.position<=3?`Posisi ${fd.position} — Podium`:`Posisi ${fd.position}`}
         </div>
-        <div style={{fontSize:12,color:"#64748B",marginTop:4}}>{fd.pts} poin · {fd.W}W {fd.D}D {fd.L}L</div>
+        <div style={{fontSize:12,color:"#64748B",marginTop:4}}>{fdPts} poin · {fdW}W {fdD}D {fdL}L</div>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,marginBottom:14}}>
-        {[["Menang",fd.W,"#22C55E"],["Seri",fd.D,"#F59E0B"],["Kalah",fd.L,"#EF4444"],
+        {[["Menang",fdW,"#22C55E"],["Seri",fdD,"#F59E0B"],["Kalah",fdL,"#EF4444"],
           ["Gol",fd.gf,"#3B82F6"],["Kebobolan",fd.ga,"#EF4444"],["Clean Sheet",fd.cleanSheets,"#22C55E"]
         ].map(([l,v,c])=>(
           <div key={l} style={{background:"#0D1828",borderRadius:9,padding:"10px",textAlign:"center"}}>
@@ -1016,8 +1088,8 @@ function SimulationView({ovr,opponents,lineup,onDone}){
         }));
         const topScorer = [...statsArr].sort((a,b)=>b.st.goals-a.st.goals)[0];
         const topAssist = [...statsArr].sort((a,b)=>b.st.assists-a.st.assists)[0];
-        const topSaves  = [...statsArr].sort((a,b)=>b.st.saves-a.st.saves)[0];
-        const keyLabel  = cat => cat==="GK"?"Saves":cat==="DEF"?"Tackles":cat==="MID"?"Intercept":"Shots";
+        const topSaves = [...statsArr].sort((a,b)=>keyScore(b.st).score-keyScore(a.st).score)[0];
+        const keyLabel  = cat => cat==="GK"?"Saves":cat==="DEF"?"Tackles":cat==="MID"?"Key Pass":"Shots";
         return(
           <div style={{marginBottom:14}}>
             <div style={{fontSize:11,color:"#475569",fontWeight:600,textTransform:"uppercase",letterSpacing:0.8,marginBottom:8}}>Statistik Pemain</div>
@@ -1026,7 +1098,7 @@ function SimulationView({ovr,opponents,lineup,onDone}){
               {[
                 {icon:"⚽",label:"Top Skor",player:topScorer,val:topScorer?.st.goals,color:"#22C55E"},
                 {icon:"🎯",label:"Top Assist",player:topAssist,val:topAssist?.st.assists,color:"#F59E0B"},
-                {icon:"🧤",label:"Top Key",player:topSaves,val:topSaves?.st.saves,color:"#3B82F6"},
+                {icon:"🧤",label:"Key Player",player:topSaves,val:keyScore(topSaves?.st||{}).val,sub:keyScore(topSaves?.st||{}).unit,color:"#3B82F6"},
               ].map(({icon,label,player,val,color})=>(
                 <div key={label} style={{background:"#0D1828",borderRadius:9,padding:"8px 10px"}}>
                   <div style={{fontSize:9,color:"#475569",fontWeight:600,marginBottom:4}}>{icon} {label}</div>
@@ -1037,7 +1109,7 @@ function SimulationView({ovr,opponents,lineup,onDone}){
             </div>
             {/* Full table */}
             <div style={{background:"#0D1828",borderRadius:10,overflow:"hidden"}}>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 28px 28px 56px",padding:"6px 10px",borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 28px 28px 80px",padding:"6px 10px",borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
                 {["Pemain","G","A","Key"].map(h=>(
                   <div key={h} style={{fontSize:10,fontWeight:700,color:"#475569",textAlign:h==="Pemain"?"left":"center"}}>{h}</div>
                 ))}
@@ -1048,7 +1120,7 @@ function SimulationView({ovr,opponents,lineup,onDone}){
               }).map(({player,pos,st,cat})=>{
                 const cc=CAT_COLOR[cat];
                 return(
-                  <div key={player.name} style={{display:"grid",gridTemplateColumns:"1fr 28px 28px 56px",padding:"5px 10px",borderBottom:"1px solid rgba(255,255,255,0.04)"}}>
+                  <div key={player.name} style={{display:"grid",gridTemplateColumns:"1fr 28px 28px 80px",padding:"5px 10px",borderBottom:"1px solid rgba(255,255,255,0.04)"}}>
                     <div style={{display:"flex",alignItems:"center",gap:5}}>
                       <span style={{fontSize:9,fontWeight:700,color:cc,background:`${cc}18`,padding:"1px 5px",borderRadius:4,flexShrink:0}}>{pos}</span>
                       <span style={{fontSize:11,color:"#CBD5E1",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{player.name}</span>
@@ -1056,7 +1128,13 @@ function SimulationView({ovr,opponents,lineup,onDone}){
                     <div style={{fontSize:12,fontWeight:700,color:"#22C55E",textAlign:"center"}}>{st.goals||"·"}</div>
                     <div style={{fontSize:12,fontWeight:700,color:"#F59E0B",textAlign:"center"}}>{st.assists||"·"}</div>
                     <div style={{fontSize:11,fontWeight:600,color:"#3B82F6",textAlign:"center"}}>
-                      {st.saves||"·"}
+                      {(()=>{
+                        if(pos==="GK") return st.saves||"·";
+                        if(DEF_POS.includes(pos)) return st.tackles||"·";
+                        if(MID_POS.includes(pos)) return st.keypasses||"·";
+                        if(FWD_POS.includes(pos)) return st.shots||"·";
+                        return "·";
+                      })()}
                       <span style={{fontSize:9,color:"#334155",marginLeft:3}}>{keyLabel(cat)}</span>
                     </div>
                   </div>
@@ -1315,7 +1393,7 @@ function RecruitPhase({stage, slots, excludedNames, onReplace, onSkip, recruitCa
 
 
 // ── COMPLETION PAGE ───────────────────────────────────────────────────────────
-function CompletionPage({stageResults, slots, formation, managerName, onRestart}){
+function CompletionPage({stageResults, slots, formation, managerName, onRestart, isDesktop=false}){
   const [showShare, setShowShare] = useState(false);
   const shareRef = useRef(null);
 
@@ -1385,16 +1463,20 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
   const allStats = {};
   stageResults.forEach(r=>{
     Object.entries(r.playerStats||{}).forEach(([name,s])=>{
-      if(!allStats[name]) allStats[name]={goals:0,assists:0,saves:0};
-      allStats[name].goals += s.goals||0;
-      allStats[name].assists += s.assists||0;
-      allStats[name].saves += s.saves||0;
+      if(!allStats[name]) allStats[name]={goals:0,assists:0,saves:0,tackles:0,keypasses:0,shots:0};
+      allStats[name].goals    += s.goals||0;
+      allStats[name].assists  += s.assists||0;
+      allStats[name].saves    += s.saves||0;
+      allStats[name].tackles  += s.tackles||0;
+      allStats[name].keypasses+= s.keypasses||0;
+      allStats[name].shots    += s.shots||0;
     });
   });
   const statsArr = Object.entries(allStats).map(([name,s])=>({name,...s}));
   const topScorer = [...statsArr].sort((a,b)=>b.goals-a.goals)[0];
   const topAssist = [...statsArr].sort((a,b)=>b.assists-a.assists)[0];
-  const topSave   = [...statsArr].sort((a,b)=>b.saves-a.saves)[0];
+  const topSave   = [...statsArr].sort((a,b)=>keyScore(b).score-keyScore(a).score)[0];
+  const topKeyType = (p) => p ? keyScore(p) : {label:"Key Player", unit:"", val:0};
 
   // Share card content
   function handleSave(){
@@ -1421,6 +1503,10 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
 
   return(
     <div>
+      {/* Desktop two-column wrapper */}
+      <div style={{display:isDesktop?"grid":"block",gridTemplateColumns:"1fr 400px",gap:28,alignItems:"start"}}>
+      {/* LEFT COLUMN — main content */}
+      <div>
       {/* Main result banner */}
       <div style={{background:sc.bg,border:`1px solid ${sc.border}`,borderRadius:14,padding:"20px 16px",textAlign:"center",marginBottom:14}}>
         <div style={{fontSize:44,marginBottom:8}}>{sc.emoji}</div>
@@ -1458,7 +1544,7 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
             {[
               {icon:"⚽",label:"Top Skor",name:topScorer?.name,val:topScorer?.goals,sub:`${topScorer?.assists||0} assist`,color:"#22C55E"},
               {icon:"🎯",label:"Top Assist",name:topAssist?.name,val:topAssist?.assists,sub:`${topAssist?.goals||0} gol`,color:"#F59E0B"},
-              {icon:"🧤",label:"Top Key",name:topSave?.name,val:topSave?.saves,sub:"saves/tackles",color:"#3B82F6"},
+              {icon:"🧤",label:"Key Player",name:topSave?.name,val:topKeyType(topSave).val,sub:topKeyType(topSave).unit||"",color:"#3B82F6"},
             ].map(({icon,label,name,val,sub,color})=>(
               <div key={label} style={{background:"#0D1828",borderRadius:9,padding:"10px 8px",textAlign:"center"}}>
                 <div style={{fontSize:9,color:"#475569",fontWeight:600,marginBottom:4}}>{icon} {label}</div>
@@ -1491,15 +1577,24 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
         <Pitch formation={formation} slots={slots} readonly/>
       </div>
 
-      {/* Leaderboard */}
-      <Leaderboard managerName={managerName}/>
-
       {/* Spacer for floating buttons */}
       <div style={{height:80}}/>
+      </div>{/* end LEFT COLUMN */}
+
+      {/* RIGHT COLUMN — Leaderboard desktop only */}
+      {isDesktop&&(
+        <div style={{position:"sticky",top:16}}>
+          <Leaderboard managerName={managerName}/>
+        </div>
+      )}
+      </div>{/* end desktop grid */}
+
+      {/* Leaderboard mobile only */}
+      {!isDesktop&&<Leaderboard managerName={managerName}/>}
       {/* Floating action buttons */}
       <div style={{
         position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
-        width:"100%",maxWidth:600,
+        width:"100%",maxWidth:isDesktop?1200:600,
         background:"linear-gradient(to top, #070D1A 70%, transparent)",
         padding:"16px 16px 20px",zIndex:40,
         display:"flex",gap:8,
@@ -1630,7 +1725,7 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
               {[
                 {icon:"⚽",label:"TOP SCORER",name:topScorer?.name,val:topScorer?.goals,sub:`${topScorer?.assists||0}A`,color:"#22C55E"},
                 {icon:"🎯",label:"TOP ASSIST",name:topAssist?.name,val:topAssist?.assists,sub:`${topAssist?.goals||0}G`,color:"#F59E0B"},
-                {icon:"🧤",label:"TOP KEY",name:topSave?.name,val:topSave?.saves,sub:"saves",color:"#3B82F6"},
+                {icon:"🧤",label:"KEY PLAYER",name:topSave?.name,val:topKeyType(topSave).val,sub:topKeyType(topSave).unit||"",color:"#3B82F6"},
               ].map(({icon,label,name,val,sub,color})=>(
                 <div key={label} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:7,padding:"6px 7px",textAlign:"center"}}>
                   <div style={{fontSize:8,color:"#475569",fontWeight:600,marginBottom:2}}>{icon} {label}</div>
@@ -1668,6 +1763,8 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart}
 
 export default function MaungEleven(){
   const [phase,setPhase]=useState("name"); // name|formation|draft|simulate|recruit|done
+  const bp = useBreakpoint();
+  const isDesktop = bp === 'desktop';
   const [managerName,setManagerName]=useState(()=>{
     try{ return localStorage.getItem("maung_manager")||""; }catch(e){ return ""; }
   });
@@ -1766,8 +1863,14 @@ export default function MaungEleven(){
   function startSimulate(){ setPhase("simulate"); }
 
   function onSimDone(fd){
+    // W/D/L/pts — always recompute from matchResults (single source of truth)
+    const _mr = fd.matchResults||[];
+    const _W  = _mr.filter(r=>r.result==="W").length;
+    const _D  = _mr.filter(r=>r.result==="D").length;
+    const _L  = _mr.filter(r=>r.result==="L").length;
+    const _pts = _W*3 + _D;
     const result = {
-      stage, ovr:fd.ovr||0, W:fd.W||0, D:fd.D||0, L:fd.L||0, pts:fd.pts||0,
+      stage, ovr:fd.ovr||0, W:_W, D:_D, L:_L, pts:_pts,
       gf:fd.gf||0, ga:fd.ga||0, position:fd.position||1,
       cleanSheets:fd.cleanSheets||0, longestWin:fd.longestWin||0,
       biggestWin:fd.biggestWin||{desc:"—"}, highestScoring:fd.highestScoring||{desc:"—"}, biggestLoss:fd.biggestLoss||{desc:"—"},
@@ -1848,7 +1951,7 @@ export default function MaungEleven(){
   `;
 
   return(
-    <div className="me" style={{maxWidth:600,margin:"0 auto"}}>
+    <div className="me" style={{maxWidth:isDesktop?"none":600,margin:"0 auto",width:"100%"}}>
       <style>{css}</style>
       {/* Header */}
       <div style={{background:"#0D1B35",borderBottom:"1px solid rgba(255,255,255,0.07)"}}>
@@ -1898,103 +2001,100 @@ export default function MaungEleven(){
         })}
       </div>
 
-      <div style={{padding:"12px 14px",maxWidth:600,margin:"0 auto"}}>
+      <div style={{padding:isDesktop?"20px 28px":"12px 14px",maxWidth:isDesktop&&phase==="name"?1200:isDesktop&&phase==="draft"?900:600,margin:"0 auto",boxSizing:"border-box"}}>
 
         {/* ── NAME INPUT ── */}
         {phase==="name"&&(
           <div>
-            {/* Hero section */}
-            <div style={{textAlign:"center",padding:"16px 0 12px",marginBottom:4}}>
-              <div style={{fontSize:13,fontWeight:700,color:"#3B82F6",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Persib All-Time Dream Team</div>
-              <div style={{fontSize:22,fontWeight:800,color:"#F1F5F9",lineHeight:1.2,marginBottom:10}}>
-                Bangun tim terbaikmu.<br/>Taklukkan Asia.
-              </div>
-              <div style={{fontSize:13,color:"#64748B",lineHeight:1.7,maxWidth:320,margin:"0 auto"}}>
-                Draft 11 legenda Persib dari berbagai era. Bawa mereka melewati
-                tiga kompetisi: <span style={{color:"#E2E8F0",fontWeight:600}}>Liga Indonesia</span>,{" "}
-                <span style={{color:"#E2E8F0",fontWeight:600}}>ASEAN Club Championship</span>, hingga{" "}
-                <span style={{color:"#E2E8F0",fontWeight:600}}>AFC Champions League Elite</span>.
-              </div>
-            </div>
+            {/* Desktop: two column / Mobile: single column */}
+            <div style={{display:isDesktop?"grid":"block",gridTemplateColumns:"1fr 400px",gap:28,alignItems:"start"}}>
 
-            {/* Showcase cards — Silver, Gold, Legenda */}
-            {(()=>{
-              const showcase = [
-                PLAYERS.find(p=>p.name==="Abanda Herman"),
-                PLAYERS.find(p=>p.name==="Ciro Alves"),
-                PLAYERS.find(p=>p.name==="Robby Darwis"),
-              ].filter(Boolean);
-              return(
-                <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:14}}>
-                  {showcase.map(p=>{
-                    const tc=TIER_COLOR[p.tier], tg=TIER_GLOW[p.tier], tb=TIER_BG[p.tier];
-                    const cc=CAT_COLOR[getPosCategory(p.pos[0])];
-                    return(
-                      <div key={p.name} style={{
-                        background:tb,border:`1.5px solid ${tc}`,borderRadius:10,
-                        padding:"8px 6px",textAlign:"center",width:90,flexShrink:0,
-                        boxShadow:`0 3px 10px ${tg}`,
-                      }}>
-                        <div style={{fontSize:8,fontWeight:800,color:tc,letterSpacing:1.5,textTransform:"uppercase",marginBottom:3}}>{p.tier}</div>
-                        <div style={{fontSize:22,fontWeight:800,color:tc,lineHeight:1,marginBottom:4,textShadow:`0 0 10px ${tg}`}}>{p.rating}</div>
-                        <div style={{fontSize:9,fontWeight:700,color:"#F1F5F9",marginBottom:4,lineHeight:1.2}}>{p.name}</div>
-                        <span style={{fontSize:8,fontWeight:700,color:cc,background:`${cc}18`,padding:"1px 5px",borderRadius:20}}>{p.pos[0]}</span>
-                      </div>
-                    );
-                  })}
+              {/* LEFT COLUMN */}
+              <div>
+                {/* Hero */}
+                <div style={{textAlign:"center",padding:"16px 0 12px",marginBottom:4}}>
+                  <div style={{fontSize:13,fontWeight:700,color:"#3B82F6",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Persib All-Time Dream Team</div>
+                  <div style={{fontSize:isDesktop?28:22,fontWeight:800,color:"#F1F5F9",lineHeight:1.2,marginBottom:10}}>
+                    Bangun tim terbaikmu.<br/>Taklukkan Asia.
+                  </div>
+                  <div style={{fontSize:13,color:"#64748B",lineHeight:1.7,maxWidth:isDesktop?420:320,margin:"0 auto"}}>
+                    Draft 11 legenda Persib dari berbagai era. Bawa mereka melewati
+                    tiga kompetisi: <span style={{color:"#E2E8F0",fontWeight:600}}>Liga Indonesia</span>,{" "}
+                    <span style={{color:"#E2E8F0",fontWeight:600}}>ASEAN Club Championship</span>, hingga{" "}
+                    <span style={{color:"#E2E8F0",fontWeight:600}}>AFC Champions League Elite</span>.
+                  </div>
                 </div>
-              );
-            })()}
 
-            {/* Key mechanics pills */}
-            <div style={{display:"flex",flexWrap:"wrap",gap:5,justifyContent:"center",marginBottom:14}}>
-              {[
-                {icon:"🎴",txt:"Roll 5 pilihan per slot"},
-                {icon:"🏆",txt:"Wajib juara untuk lanjut"},
-                {icon:"💜",txt:"Legenda 3% chance"},
-                {icon:"🌟",txt:"Youth Chemistry bonus"},
-                {icon:"🔁",txt:"Re-roll 1x per stage"},
-                {icon:"🆕",txt:"Rekrutan di tiap stage"},
-              ].map(({icon,txt})=>(
-                <div key={txt} style={{
-                  background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",
-                  borderRadius:20,padding:"5px 10px",fontSize:11,color:"#94A3B8",
-                  display:"flex",alignItems:"center",gap:5,
-                }}>
-                  <span>{icon}</span><span>{txt}</span>
+                {/* Showcase cards */}
+                {(()=>{
+                  const showcase=[
+                    PLAYERS.find(p=>p.name==="Abanda Herman"),
+                    PLAYERS.find(p=>p.name==="Ciro Alves"),
+                    PLAYERS.find(p=>p.name==="Robby Darwis"),
+                  ].filter(Boolean);
+                  return(
+                    <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:14}}>
+                      {showcase.map(p=>{
+                        const tc=TIER_COLOR[p.tier],tg=TIER_GLOW[p.tier],tb=TIER_BG[p.tier];
+                        const cc=CAT_COLOR[getPosCategory(p.pos[0])];
+                        return(
+                          <div key={p.name} style={{background:tb,border:`1.5px solid ${tc}`,borderRadius:10,
+                            padding:"8px 6px",textAlign:"center",width:isDesktop?110:90,flexShrink:0,
+                            boxShadow:`0 3px 10px ${tg}`}}>
+                            <div style={{fontSize:8,fontWeight:800,color:tc,letterSpacing:1.5,textTransform:"uppercase",marginBottom:3}}>{p.tier}</div>
+                            <div style={{fontSize:isDesktop?26:22,fontWeight:800,color:tc,lineHeight:1,marginBottom:4,textShadow:`0 0 10px ${tg}`}}>{p.rating}</div>
+                            <div style={{fontSize:9,fontWeight:700,color:"#F1F5F9",marginBottom:4,lineHeight:1.2}}>{p.name}</div>
+                            <span style={{fontSize:8,fontWeight:700,color:cc,background:`${cc}18`,padding:"1px 5px",borderRadius:20}}>{p.pos[0]}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+
+                {/* Pills */}
+                <div style={{display:"flex",flexWrap:"wrap",gap:5,justifyContent:"center",marginBottom:14}}>
+                  {[
+                    {icon:"🎴",txt:"Roll 5 pilihan per slot"},{icon:"🏆",txt:"Wajib juara untuk lanjut"},
+                    {icon:"💜",txt:"Legenda 3% chance"},{icon:"🌟",txt:"Youth Chemistry bonus"},
+                    {icon:"🔁",txt:"Re-roll 1x per stage"},{icon:"🆕",txt:"Rekrutan di tiap stage"},
+                  ].map(({icon,txt})=>(
+                    <div key={txt} style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",
+                      borderRadius:20,padding:"5px 10px",fontSize:11,color:"#94A3B8",
+                      display:"flex",alignItems:"center",gap:5}}>
+                      <span>{icon}</span><span>{txt}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            {/* Name input */}
-            <div style={{background:"#0D1828",borderRadius:12,padding:"16px",marginBottom:14}}>
-              <div style={{fontSize:12,fontWeight:700,color:"#E2E8F0",marginBottom:4}}>Siapa nama manajermu?</div>
-              <div style={{fontSize:11,color:"#475569",marginBottom:10}}>Namamu akan muncul di hasil akhir dan share card</div>
-              <input
-                type="text"
-                maxLength={15}
-                value={managerName}
-                onChange={e=>saveManagerName(e.target.value.slice(0,15))}
-                placeholder="Masukkan nama (maks 15 karakter)"
-                style={{
-                  width:"100%",background:"#060B14",border:"1px solid rgba(255,255,255,0.12)",
-                  borderRadius:8,padding:"10px 12px",fontSize:14,color:"#E2E8F0",
-                  outline:"none",fontFamily:"inherit",marginBottom:6,
-                }}
-              />
-              <div style={{fontSize:10,color:"#334155",textAlign:"right"}}>{managerName.length}/15</div>
-            </div>
+                {/* Name input */}
+                <div style={{background:"#0D1828",borderRadius:12,padding:"16px",marginBottom:14}}>
+                  <div style={{fontSize:12,fontWeight:700,color:"#E2E8F0",marginBottom:4}}>Siapa nama manajermu?</div>
+                  <div style={{fontSize:11,color:"#475569",marginBottom:10}}>Namamu akan muncul di hasil akhir dan share card</div>
+                  <input type="text" maxLength={15} value={managerName}
+                    onChange={e=>saveManagerName(e.target.value.slice(0,15))}
+                    placeholder="Masukkan nama (maks 15 karakter)"
+                    style={{width:"100%",background:"#060B14",border:"1px solid rgba(255,255,255,0.12)",
+                      borderRadius:8,padding:"10px 12px",fontSize:14,color:"#E2E8F0",
+                      outline:"none",fontFamily:"inherit",marginBottom:6,boxSizing:"border-box"}}
+                  />
+                  <div style={{fontSize:10,color:"#334155",textAlign:"right"}}>{managerName.length}/15</div>
+                </div>
 
-            <button className="btn-p"
-              disabled={!managerName.trim()}
-              onClick={()=>setPhase("formation")}
-            >
-              {managerName.trim()?`Siap, ${managerName.trim()}! Pilih Formasi →`:"Masukkan nama dulu"}
-            </button>
+                <button className="btn-p" disabled={!managerName.trim()} onClick={()=>setPhase("formation")}>
+                  {managerName.trim()?`Siap, ${managerName.trim()}! Pilih Formasi →`:"Masukkan nama dulu"}
+                </button>
 
-            {/* Leaderboard preview on landing */}
-            <div style={{marginTop:16}}>
-              <Leaderboard managerName={managerName} compact/>
+                {/* Leaderboard mobile only */}
+                {!isDesktop&&<div style={{marginTop:16}}><Leaderboard managerName={managerName} compact/></div>}
+              </div>
+
+              {/* RIGHT COLUMN — leaderboard desktop only */}
+              {isDesktop&&(
+                <div style={{position:"sticky",top:16}}>
+                  <Leaderboard managerName={managerName} compact/>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -2047,51 +2147,66 @@ export default function MaungEleven(){
             <div style={{fontSize:11,color:"#475569",fontWeight:600,marginBottom:8}}>
               {filledSlots.length}/11 pemain diisi
             </div>
-            <div style={{marginBottom:12}}>
-              <Pitch formation={formation} slots={slots} activeSlot={activeSlot} onSlotClick={selectSlot}/>
-            </div>
-            <OvrPanel slots={slots}/>
-            {activeSlot!==null&&activeSlot!==undefined&&(()=>{
-              const slot=slots.find(s=>s.id===activeSlot);
-              return(
+
+            {/* Desktop: pitch left, cards right. Mobile: stacked */}
+            <div style={{display:isDesktop?"grid":"block",gridTemplateColumns:"1fr 440px",gap:28,alignItems:"start"}}>
+
+              {/* LEFT — Pitch + OVR */}
+              <div>
                 <div style={{marginBottom:12}}>
-                  <div style={{background:"#0D1828",borderRadius:10,padding:"10px 12px",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
-                    <div>
-                      <div style={{fontSize:11,color:"#475569"}}>Rolling untuk</div>
-                      <div style={{fontSize:14,fontWeight:700,color:CAT_COLOR[getPosCategory(slot?.pos)]}}>{slot?.pos}</div>
-                    </div>
-                    <div style={{display:"flex",gap:7,alignItems:"center"}}>
-                      {cardPhase==="choosing"&&rerollLeft>0&&<button className="btn-s" onClick={doReroll}>Re-roll ({rerollLeft})</button>}
-                      <button className="btn-p" style={{width:"auto",padding:"10px 18px"}} onClick={rollCards} disabled={cardPhase==="spinning"||cardPhase==="choosing"}>
-                        {cardPhase==="idle"?"Roll":"Rolling..."}
-                      </button>
-                    </div>
-                  </div>
-                  {cards&&(
-                    <div ref={cardsRef}>
-                      {/* Row 1: first 3 cards */}
-                      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginBottom:6}}>
-                        {cards.slice(0,3).map((c,i)=><PlayerCard key={i} card={c} selectable={cardPhase==="choosing"} selected={selectedCard===i} onClick={()=>pickCard(i)}/>)}
-                      </div>
-                      {/* Row 2: last 2 cards centered */}
-                      <div style={{display:"flex",gap:6,justifyContent:"center"}}>
-                        {cards.slice(3,5).map((c,i)=>(
-                          <div key={i+3} style={{width:"calc(33.333% - 3px)"}}>
-                            <PlayerCard card={c} selectable={cardPhase==="choosing"} selected={selectedCard===i+3} onClick={()=>pickCard(i+3)}/>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <Pitch formation={formation} slots={slots} activeSlot={activeSlot} onSlotClick={selectSlot}/>
                 </div>
-              );
-            })()}
-            {activeSlot===null&&!allFilled&&(
-              <div style={{fontSize:12,color:"#2D3F58",textAlign:"center",padding:"8px 0",fontStyle:"italic"}}>Tap slot kosong di lapangan</div>
-            )}
-            {allFilled&&(
-              <button className="btn-p" onClick={startSimulate}>Mulai {STAGE_NAMES[stage]} →</button>
-            )}
+                <OvrPanel slots={slots}/>
+              </div>
+
+              {/* RIGHT — Roll cards */}
+              <div>
+                {activeSlot!==null&&activeSlot!==undefined&&(()=>{
+                  const slot=slots.find(s=>s.id===activeSlot);
+                  return(
+                    <div style={{marginBottom:12}}>
+                      <div style={{background:"#0D1828",borderRadius:10,padding:"10px 12px",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
+                        <div>
+                          <div style={{fontSize:11,color:"#475569"}}>Rolling untuk</div>
+                          <div style={{fontSize:14,fontWeight:700,color:CAT_COLOR[getPosCategory(slot?.pos)]}}>{slot?.pos}</div>
+                        </div>
+                        <div style={{display:"flex",gap:7,alignItems:"center"}}>
+                          {cardPhase==="choosing"&&rerollLeft>0&&<button className="btn-s" onClick={doReroll}>Re-roll ({rerollLeft})</button>}
+                          <button className="btn-p" style={{width:"auto",padding:"10px 18px"}} onClick={rollCards} disabled={cardPhase==="spinning"||cardPhase==="choosing"}>
+                            {cardPhase==="idle"?"Roll":"Rolling..."}
+                          </button>
+                        </div>
+                      </div>
+                      {cards&&(
+                        <div ref={cardsRef}>
+                          {/* Row 1: first 3 cards */}
+                          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginBottom:6}}>
+                            {cards.slice(0,3).map((c,i)=><PlayerCard key={i} card={c} selectable={cardPhase==="choosing"} selected={selectedCard===i} onClick={()=>pickCard(i)}/>)}
+                          </div>
+                          {/* Row 2: last 2 cards centered */}
+                          <div style={{display:"flex",gap:6,justifyContent:"center"}}>
+                            {cards.slice(3,5).map((c,i)=>(
+                              <div key={i+3} style={{width:"calc(33.333% - 3px)"}}>
+                                <PlayerCard card={c} selectable={cardPhase==="choosing"} selected={selectedCard===i+3} onClick={()=>pickCard(i+3)}/>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+                {activeSlot===null&&!allFilled&&(
+                  <div style={{fontSize:12,color:"#2D3F58",textAlign:"center",padding:"20px 0",fontStyle:"italic"}}>
+                    {isDesktop?"Klik slot kosong di lapangan untuk mulai roll":"Tap slot kosong di lapangan"}
+                  </div>
+                )}
+                {allFilled&&(
+                  <button className="btn-p" onClick={startSimulate}>Mulai {STAGE_NAMES[stage]} →</button>
+                )}
+              </div>
+            </div>
+
           </>
         )}
 
@@ -2134,6 +2249,7 @@ export default function MaungEleven(){
             formation={formation}
             managerName={managerName}
             onRestart={restart}
+            isDesktop={isDesktop}
           />
         )}
 
