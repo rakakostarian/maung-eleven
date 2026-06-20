@@ -1077,10 +1077,57 @@ function RTGLeaderboard({managerName=""}){
 }
 
 
+// ── FLOATING CTA (scroll-to-bottom helper) ───────────────────────────────────
+// Muncul di bottom layar saat button utama belum terlihat.
+// Klik → smooth scroll ke button. Hilang otomatis saat button masuk viewport.
+function FloatingCTA({targetRef, label="Lanjut ↓"}){
+  const [visible, setVisible] = useState(false);
+
+  useEffect(()=>{
+    if(!targetRef?.current) return;
+    // Pakai IntersectionObserver — muncul saat target di luar viewport
+    const obs = new IntersectionObserver(
+      ([entry])=> setVisible(!entry.isIntersecting),
+      {threshold: 0.5}
+    );
+    obs.observe(targetRef.current);
+    return ()=> obs.disconnect();
+  }, [targetRef]);
+
+  if(!visible) return null;
+
+  return(
+    <div style={{
+      position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)",
+      width:"100%", maxWidth:600,
+      background:"linear-gradient(to top, #070D1A 60%, transparent)",
+      padding:"20px 16px 20px", zIndex:50,
+      pointerEvents:"auto",
+    }}>
+      <button
+        onClick={()=> targetRef.current?.scrollIntoView({behavior:"smooth", block:"center"})}
+        style={{
+          width:"100%", background:"rgba(59,130,246,0.15)",
+          border:"1px solid rgba(59,130,246,0.3)",
+          color:"#93C5FD", borderRadius:10, padding:"11px",
+          fontSize:13, fontWeight:600, cursor:"pointer",
+          display:"flex", alignItems:"center", justifyContent:"center", gap:6,
+        }}
+      >
+        <span style={{animation:"floatBounce 1.4s ease-in-out infinite"}}>↓</span>
+        {label}
+        <span style={{animation:"floatBounce 1.4s ease-in-out infinite"}}>↓</span>
+      </button>
+    </div>
+  );
+}
+
 // ── RTG STORY INTRO ──────────────────────────────────────────────────────────
 function RTGStoryIntro({managerName, dispatch, hasSavedSession, savedSeason}){
+  const ctaRef = useRef(null);
   return(
     <div style={{maxWidth:520,margin:"0 auto"}}>
+      <FloatingCTA targetRef={ctaRef} label="Mulai Perjalanan"/>
       {/* Back button — same style as Classic */}
       <button onClick={()=>dispatch({type:"GO_HOME"})} style={{
         background:"transparent",color:"#475569",border:"none",
@@ -1171,7 +1218,7 @@ function RTGStoryIntro({managerName, dispatch, hasSavedSession, savedSeason}){
 
       {/* CTA — same placement and style as Classic */}
       {!hasSavedSession&&(
-        <button onClick={()=>dispatch({type:"GO_FORMATION"})} style={{
+        <button ref={ctaRef} onClick={()=>dispatch({type:"GO_FORMATION"})} style={{
           width:"100%",background:"linear-gradient(135deg,#92400E,#B45309)",
           color:"#FDE68A",border:"none",padding:"14px",borderRadius:10,
           fontSize:15,fontWeight:700,cursor:"pointer",
@@ -1186,6 +1233,7 @@ function RTGStoryIntro({managerName, dispatch, hasSavedSession, savedSeason}){
 
 // ── FORMATION SELECTOR (reused from Classic) ─────────────────────────────────
 function RTGFormationSelector({state, dispatch}){
+  const ctaRef = useRef(null);
   const {formation} = state;
   const bp = useBreakpoint();
   const isDesktop = bp === "desktop";
@@ -1256,13 +1304,14 @@ function RTGFormationSelector({state, dispatch}){
             </div>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
-            <button onClick={()=>dispatch({type:"START_DRAFT"})} style={{
+            <button ref={ctaRef} onClick={()=>dispatch({type:"START_DRAFT"})} style={{
               width:"100%",background:"linear-gradient(135deg,#92400E,#B45309)",
               color:"#FDE68A",border:"none",padding:"13px",borderRadius:10,
               fontSize:14,fontWeight:700,cursor:"pointer",
               boxShadow:"0 4px 16px rgba(146,64,14,0.4)",
             }}>
-              Lihat Draft Pemain & Beli →
+              <FloatingCTA targetRef={ctaRef} label="Pilih Formasi"/>
+      Lihat Draft Pemain & Beli →
             </button>
             <button onClick={()=>dispatch({type:"SKIP_DRAFT"})} style={{
               width:"100%",background:"transparent",
@@ -1280,6 +1329,7 @@ function RTGFormationSelector({state, dispatch}){
 
 // ── INITIAL DRAFT (15 kartu, sorted by role then tier) ──────────────────────
 function RTGInitialDraft({state, dispatch}){
+  const ctaRef = useRef(null);
   const {coins, formation, squad} = state;
 
   // Generate 15 cards sorted by role (GK→DEF→MID→FWD) then tier
@@ -1433,7 +1483,7 @@ function RTGInitialDraft({state, dispatch}){
       {/* Action buttons */}
       <div style={{display:"flex",flexDirection:"column",gap:8}}>
         {cart.length>0&&(
-          <button onClick={handleConfirm} style={{
+          <button ref={ctaRef} onClick={handleConfirm} style={{
             width:"100%",background:"linear-gradient(135deg,#92400E,#B45309)",
             color:"#FDE68A",border:"none",padding:"12px",borderRadius:10,
             fontSize:13,fontWeight:700,cursor:"pointer",
@@ -1450,13 +1500,14 @@ function RTGInitialDraft({state, dispatch}){
           {cart.length===0?"Lewati — Mulai dengan Squad Ini":"Batalkan pilihan & Lewati"}
         </button>
       </div>
+      <FloatingCTA targetRef={ctaRef} label="Konfirmasi Draft"/>
     </div>
   );
-}
-
+} 
 
 // ── SQUAD BOARD (pitch readonly + list-first interaction) ────────────────────
 function SquadBoard({state, dispatch}){
+  const ctaRef = useRef(null);
   const {formation, squad, coins} = state;
   // selected: null | {type:"starter", index:N, player, slotPos} | {type:"bench", playerName:str, player}
   const [selected, setSelected] = useState(null);
@@ -1760,9 +1811,10 @@ function SquadBoard({state, dispatch}){
       </div>
 
       {/* Confirm button */}
+      <FloatingCTA targetRef={ctaRef} label="Mulai Musim"/>
       <button
         disabled={!allStartersFilled}
-        onClick={()=>dispatch({type:"CONFIRM_LINEUP"})}
+        ref={ctaRef} onClick={()=>dispatch({type:"CONFIRM_LINEUP"})}
         style={{
           width:"100%",
           background:allStartersFilled?"linear-gradient(135deg,#003DA5,#2563EB)":"rgba(255,255,255,0.05)",
@@ -2061,6 +2113,7 @@ function RTGSeasonView({state, dispatch}){
 
 // ── SEASON HALF SUMMARY ───────────────────────────────────────────────────────
 function SeasonHalfSummary({state, dispatch}){
+  const ctaRef = useRef(null);
   const halfStandings = state._halfStandings||[];
   const halfPos       = state._halfPos||18;
   const sponsorBonus  = state._sponsorBonus||0;
@@ -2120,7 +2173,8 @@ function SeasonHalfSummary({state, dispatch}){
 
       {/* Klasemen dihapus — cukup posisi di result card */}
 
-      <button onClick={()=>dispatch({type:"CONTINUE_BABAK2"})} style={{
+      <FloatingCTA targetRef={ctaRef} label="Lanjut Putaran 2"/>
+      <button ref={ctaRef} onClick={()=>dispatch({type:"CONTINUE_BABAK2"})} style={{
         width:"100%",background:"linear-gradient(135deg,#003DA5,#2563EB)",
         color:"#fff",border:"none",padding:"13px",borderRadius:10,
         fontSize:14,fontWeight:700,cursor:"pointer",
@@ -2134,6 +2188,7 @@ function SeasonHalfSummary({state, dispatch}){
 
 // ── SEASON END SUMMARY ────────────────────────────────────────────────────────
 function SeasonEndSummary({state, dispatch}){
+  const ctaRef = useRef(null);
   const finalStandings = state._finalStandings||[];
   const finalPos       = state._finalPos||18;
   const endBonus       = state._endBonus||0;
@@ -2286,8 +2341,9 @@ function SeasonEndSummary({state, dispatch}){
       </div>
 
       {/* CTA */}
+      <FloatingCTA targetRef={ctaRef} label="Lihat Hasil"/>
       {isChampion ? (
-        <button onClick={()=>dispatch({type:"GO_COMPLETION"})} style={{
+        <button ref={ctaRef} onClick={()=>dispatch({type:"GO_COMPLETION"})} style={{
           width:"100%",background:"linear-gradient(135deg,#92400E,#B45309)",
           color:"#FDE68A",border:"none",padding:"13px",borderRadius:10,
           fontSize:14,fontWeight:700,cursor:"pointer",
@@ -2320,6 +2376,7 @@ function SeasonEndSummary({state, dispatch}){
 
 // ── RTG TRANSFER WINDOW (antar musim) ─────────────────────────────────────────
 function RTGTransferWindow({state, dispatch}){
+  const ctaRef = useRef(null);
   const {coins, currentSeason, ownedPlayerIds, formation} = state;
   const [tab, setTab]       = useState("buy");
   const [buyCart, setBuyCart]   = useState([]); // player names to buy
@@ -2574,7 +2631,8 @@ function RTGTransferWindow({state, dispatch}){
       )}
 
       {/* Confirm button */}
-      <button onClick={handleConfirm} disabled={!canAffordAll} style={{
+      <FloatingCTA targetRef={ctaRef} label="Konfirmasi Transfer"/>
+      <button ref={ctaRef} onClick={handleConfirm} disabled={!canAffordAll} style={{
         width:"100%",
         background:canAffordAll?"linear-gradient(135deg,#003DA5,#2563EB)":"rgba(255,255,255,0.05)",
         color:canAffordAll?"#fff":"#334155",
@@ -2594,6 +2652,7 @@ function RTGTransferWindow({state, dispatch}){
 }
 
 function RTGCompletionPage({state, dispatch}){
+  const ctaRef = useRef(null);
   const posterRef      = useRef(null);
   const submitLockRef  = useRef(false); // useRef kebal StrictMode double-invoke
   const [showPoster, setShowPoster]     = useState(false);
@@ -2995,7 +3054,8 @@ function RTGCompletionPage({state, dispatch}){
           display:"flex",alignItems:"center",justifyContent:"center",gap:6,
           boxShadow:"0 4px 20px rgba(0,61,165,0.5)",
         }}>📥 Download Poster Hasil Lengkap</button>
-        <button onClick={()=>dispatch({type:"RESTART_RTG"})} style={{
+        <FloatingCTA targetRef={ctaRef} label="Main Lagi"/>
+      <button ref={ctaRef} onClick={()=>dispatch({type:"RESTART_RTG"})} style={{
           flex:1,background:"rgba(255,255,255,0.06)",color:"#94A3B8",
           border:"1px solid rgba(255,255,255,0.12)",
           padding:"13px",borderRadius:10,fontSize:13,fontWeight:600,cursor:"pointer",
@@ -3140,6 +3200,7 @@ function rollBoosterPrize(){
 }
 
 function CoinBoosterPage({state, dispatch}){
+  const ctaRef = useRef(null);
   const [phase, setPhase]     = useState("intro");   // intro | rolling | result
   const [slots, setSlots]     = useState([0,1,2]);   // indices into display array
   const [prize, setPrize]     = useState(null);
@@ -3280,16 +3341,19 @@ function CoinBoosterPage({state, dispatch}){
 
         {/* Spin button */}
         {phase==="intro"&&(
-          <button onClick={startRoll} style={{
-            width:"100%",
-            background:"linear-gradient(135deg,#92400E,#B45309)",
-            color:"#FDE68A",border:"none",padding:"14px",borderRadius:10,
-            fontSize:15,fontWeight:700,cursor:"pointer",
-            boxShadow:"0 4px 20px rgba(146,64,14,0.5)",
-            letterSpacing:1,
-          }}>
-            🎰 PUTAR SEKARANG
-          </button>
+          <>
+            <FloatingCTA targetRef={ctaRef} label="Putar Sekarang"/>
+            <button ref={ctaRef} onClick={startRoll} style={{
+              width:"100%",
+              background:"linear-gradient(135deg,#92400E,#B45309)",
+              color:"#FDE68A",border:"none",padding:"14px",borderRadius:10,
+              fontSize:15,fontWeight:700,cursor:"pointer",
+              boxShadow:"0 4px 20px rgba(146,64,14,0.5)",
+              letterSpacing:1,
+            }}>
+              🎰 PUTAR SEKARANG
+            </button>
+          </>
         )}
 
         {phase==="rolling"&&(
@@ -3326,7 +3390,7 @@ function CoinBoosterPage({state, dispatch}){
       )}
 
       {phase==="result"&&prize&&(
-        <button onClick={()=>dispatch({type:"CLAIM_BOOSTER",payload:{amount:prize.amount}})} style={{
+        <button ref={ctaRef} onClick={()=>dispatch({type:"CLAIM_BOOSTER",payload:{amount:prize.amount}})} style={{
           width:"100%",
           background:"linear-gradient(135deg,#003DA5,#2563EB)",
           color:"#fff",border:"none",padding:"14px",borderRadius:10,
@@ -3755,9 +3819,15 @@ export default function RoadToGlory({onSwitchMode}){
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
     @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
     @keyframes fadeSlideIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
+    @keyframes floatBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
   `;
 
   const {gamePhase} = state;
+
+  // Auto scroll to top setiap ganti phase
+  useEffect(()=>{
+    window.scrollTo({top:0, behavior:'smooth'});
+  }, [gamePhase]);
 
   return(
     <div style={{maxWidth:600,margin:"0 auto",minHeight:"100vh",background:"#070D1A"}}>
