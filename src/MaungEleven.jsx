@@ -2329,9 +2329,11 @@ export default function MaungEleven(){
                       disabled={!managerName.trim()}
                       onClick={()=>{
                         if(selectedMode==="rtg"){
+                          track('mode_started', {mode:'rtg', manager:managerName});
                           try{ localStorage.setItem("maung_pendingMode","rtg"); }catch(e){}
                           window.location.reload();
                         } else {
+                          track('mode_started', {mode:'classic', manager:managerName});
                           setPhase("classic_intro");
                         }
                       }}
