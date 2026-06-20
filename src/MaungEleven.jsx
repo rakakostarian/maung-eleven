@@ -127,7 +127,7 @@ const RAW = [
   {name:"Redouane Barkaoui",pos:["ST"],rating:90,type:"Asing"},
   {name:"Sinthaweechai Kosin",pos:["GK"],rating:90,type:"Asing"},
   {name:"Alberto Rodriguez",pos:["CB"],rating:90,type:"Asing"},
-  {name:"Nick Kuipers",pos:["CB","RB"],rating:89,type:"Asing"},
+  {name:"Nick Kuipers",pos:["CB","RB"],rating:90,type:"Asing"},
   {name:"Achmad Jufriyanto",pos:["CB","CDM"],rating:89,type:"Lokal"},
   {name:"Frans Putros",pos:["RB","CDM"],rating:89,type:"Asing"},
   {name:"Supardi Nasir",pos:["RB","RWB","RM"],rating:89,type:"Lokal"},
@@ -142,13 +142,13 @@ const RAW = [
   {name:"Patricio Jimenez",pos:["CB"],rating:89,type:"Asing"},
   {name:"Febri Hariyadi",pos:["RW","RM"],rating:89,type:"Lokal"},
   {name:"Zulham Zamrun",pos:["LW","ST"],rating:89,type:"Lokal"},
-  {name:"I Made Wirawan",pos:["GK"],rating:88,type:"Lokal"},
+  {name:"Made Wirawan",pos:["GK"],rating:88,type:"Lokal"},
   {name:"Tony Sucipto",pos:["LB","CDM","CB"],rating:88,type:"Lokal"},
   {name:"Esteban Vizcarra",pos:["CAM","LW","RM"],rating:88,type:"Asing"},
-  {name:"Atep Rizal",pos:["LM","LW","CAM"],rating:88,type:"Lokal"},
+  {name:"Atep Rizal",pos:["LM","LW"],rating:90,type:"Lokal"},
   {name:"Ezechiel N'Douassel",pos:["ST","RW"],rating:88,type:"Asing"},
   {name:"Serginho van Dijk",pos:["ST","LW"],rating:88,type:"Lokal"},
-  {name:"Stefano Beltrame",pos:["CAM","LW","RW"],rating:88,type:"Asing"},
+  {name:"Stefano Beltrame",pos:["CAM","LW","RW"],rating:89,type:"Asing"},
   {name:"Ridwan",pos:["RW","RM"],rating:88,type:"Lokal"},
   {name:"Zulkifli Syukur",pos:["RB","RWB"],rating:88,type:"Lokal"},
   {name:"Gilang Angga K.",pos:["RB","RWB"],rating:88,type:"Lokal"},
@@ -156,7 +156,7 @@ const RAW = [
   {name:"Abanda Herman",pos:["CB"],rating:88,type:"Asing"},
   {name:"Eliano Reijnders",pos:["LW","LB","CDM"],rating:88,type:"Lokal"},
   {name:"Markus Horison",pos:["GK"],rating:87,type:"Lokal"},
-  {name:"Vladimir Vujovic",pos:["CB"],rating:87,type:"Asing"},
+  {name:"Vladimir Vujovic",pos:["CB"],rating:90,type:"Asing"},
   {name:"Daisuke Sato",pos:["LB","LWB","RB"],rating:87,type:"Asing"},
   {name:"Ricky Kambuaya",pos:["CM","CAM","RM"],rating:87,type:"Lokal"},
   {name:"Saddil Ramdani",pos:["LW","LM"],rating:87,type:"Lokal"},
@@ -179,7 +179,7 @@ const RAW = [
   {name:"Marcio Souza",pos:["ST","LW","RW"],rating:86,type:"Asing"},
   {name:"Levy Madinda",pos:["CM","CAM"],rating:86,type:"Asing"},
   {name:"Omid Nazari",pos:["CM","CAM"],rating:86,type:"Asing"},
-  {name:"Julio Cesar",pos:["CB"],rating:86,type:"Asing"},
+  {name:"Julio Cesar",pos:["CB"],rating:88,type:"Asing"},
   {name:"Robbie Gaspar",pos:["CDM","CM"],rating:86,type:"Asing"},
   {name:"Fabiano Beltrame",pos:["CB","CDM"],rating:85,type:"Asing"},
   {name:"Dion Markx",pos:["CB"],rating:85,type:"Youth"},
@@ -206,7 +206,7 @@ const RAW = [
   {name:"Mbida Messi",pos:["CAM"],rating:84,type:"Asing"},
   {name:"Satoshi Otomo",pos:["CAM","LW","RW"],rating:84,type:"Asing"},
   {name:"Frets Butuan",pos:["RW","LW","RM"],rating:83,type:"Lokal"},
-  {name:"Gian Zola Nasrullah",pos:["CAM","LW","LM"],rating:83,type:"Lokal"},
+  {name:"Gian Zola Nasrullah",pos:["CAM","LW","LM"],rating:83,type:"Youth"},
   {name:"Maman",pos:["CB"],rating:83,type:"Lokal"},
   {name:"Zulkifli Lukmansyah",pos:["RB","LB","RM"],rating:83,type:"Youth"},
   {name:"Geoffrey Castillion",pos:["ST","LW"],rating:83,type:"Asing"},
@@ -262,7 +262,7 @@ const RAW = [
   {name:"Sheva Sanggasi",pos:["GK"],rating:79,type:"Youth"},
   {name:"Ahmad Agung",pos:["CDM"],rating:79,type:"Lokal"},
   {name:"Faris Abdul",pos:["CB"],rating:79,type:"Youth"},
-  {name:"Agung Mulyadi",pos:["RW","LW","CAM"],rating:79,type:"Lokal"},
+  {name:"Agung Mulyadi",pos:["RW","LW","CAM"],rating:79,type:"Youth"},
   {name:"Athaya Zahran",pos:["ST"],rating:79,type:"Youth"},
   {name:"Ridwan Ansori",pos:["ST","LW","CAM"],rating:79,type:"Youth"},
   {name:"Muhammad Natshir",pos:["GK"],rating:78,type:"Lokal"},
@@ -273,6 +273,11 @@ const RAW = [
   {name:"Jajang Sukmara",pos:["LB","RB","RWB"],rating:77,type:"Lokal"},
   {name:"Agung Pribadi",pos:["CAM","CM"],rating:77,type:"Lokal"},
   {name:"Dias Angga",pos:["RB","LB","LWB"],rating:77,type:"Lokal"},
+  {name:"Farshad Noor",pos:["CM","CDM"],rating:79,type:"Asing"},
+  {name:"Ajat Sudrajat",pos:["ST"],rating:98,type:"Legenda"},
+  {name:"Ilham M.",pos:["LW","RW"],rating:84,type:"Lokal"},
+  {name:"Cucu Hidayat",pos:["CDM","CM"],rating:85,type:"Lokal"},
+  {name:"Boy Jati Asmara",pos:["ST","LW"],rating:86,type:"Lokal"},
 ];
 
 // Compute tier from rating — single source of truth
@@ -797,6 +802,190 @@ function GuideBox({icon,title,children}){
 }
 
 // ── SIMULATION VIEW ───────────────────────────────────────────────────────────
+
+
+// ── LANDING LEADERBOARD (2 tabs: Classic + RTG) ────────────────────────────
+function LandingLeaderboard({managerName=""}){
+  const [activeMode, setActiveMode] = useState('classic');
+  const [tab, setTab]               = useState('pts');
+  const [rtgTab, setRtgTab]         = useState('fastest');
+  const [data, setData]             = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [userActed, setUserActed]   = useState(false);
+  const autoRef   = useRef(null);
+  const resumeRef = useRef(null);
+
+  // Auto-rotate every 3s unless user interacted (paused 15s)
+  useEffect(()=>{
+    if(userActed) return;
+    autoRef.current = setInterval(()=>{
+      setActiveMode(m=>{
+        const next = m==='classic'?'rtg':'classic';
+        if(next==='classic') setTab('pts'); else setRtgTab('fastest');
+        return next;
+      });
+    }, 3000);
+    return ()=>clearInterval(autoRef.current);
+  },[userActed]);
+
+  useEffect(()=>()=>{clearInterval(autoRef.current);clearTimeout(resumeRef.current);},[]);
+
+  const handleModeClick = (key)=>{
+    setActiveMode(key);
+    if(key==='classic') setTab('pts'); else setRtgTab('fastest');
+    setUserActed(true);
+    clearInterval(autoRef.current);
+    clearTimeout(resumeRef.current);
+    resumeRef.current = setTimeout(()=>setUserActed(false), 15000);
+  };
+
+  useEffect(()=>{
+    setLoading(true); setData([]);
+    if(activeMode==='classic'){
+      fetchLeaderboard(tab, 10).then(d=>{ setData(d||[]); setLoading(false); });
+    } else {
+      if(rtgTab==='fastest'){
+        supaFetch(`/RTG_Leaderboard?select=manager,pts,ovr,champion_season,seasons_played,created_at&champion=eq.true&order=champion_season.asc,pts.desc&limit=10`)
+          .then(d=>{ setData(d||[]); setLoading(false); });
+      } else {
+        supaFetch(`/RTG_Leaderboard?select=manager,pts,ovr,champion_season,seasons_played,created_at&champion=eq.true&order=ovr.desc,pts.desc&limit=10`)
+          .then(d=>{ setData(d||[]); setLoading(false); });
+      }
+    }
+  },[activeMode, tab, rtgTab]);
+
+  const classicTabs = [{key:'pts',label:'Poin'},{key:'ovr',label:'OVR'},{key:'wins',label:'Kemenangan'}];
+  const rtgTabs     = [{key:'fastest',label:'⚡ Tercepat'},{key:'ovr',label:'💪 OVR'}];
+  const modeColor   = activeMode==='classic'?'#3B82F6':'#F59E0B';
+
+  return(
+    <div style={{background:"#0D1828",borderRadius:12,overflow:"hidden"}}>
+      {/* Mode tabs + auto-rotate progress bar */}
+      <div style={{borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+        {/* Top countdown bar — shrinks right to left, hidden when user paused */}
+        {!userActed&&(
+          <div key={activeMode} style={{
+            height:3,background:modeColor,
+            animation:"leaderboardProgress 3s linear forwards",
+            transformOrigin:"left",
+          }}/>
+        )}
+        <div style={{display:"flex"}}>
+          {[{key:'classic',label:'⚡ Classic'},{key:'rtg',label:'📖 Road to Glory'}].map(m=>(
+            <button key={m.key} onClick={()=>handleModeClick(m.key)} style={{
+              flex:1,padding:"9px 8px",fontSize:11,fontWeight:700,cursor:"pointer",border:"none",
+              background:activeMode===m.key?"#070D1A":"transparent",
+              color:activeMode===m.key?(m.key==='classic'?"#3B82F6":"#F59E0B"):"#334155",
+              borderBottom:activeMode===m.key?`2px solid ${m.key==='classic'?"#3B82F6":"#F59E0B"}`:"2px solid transparent",
+            }}>{m.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Sub-tabs */}
+      <div style={{padding:"7px 12px",borderBottom:"1px solid rgba(255,255,255,0.04)",
+        display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div style={{fontSize:11,fontWeight:700,color:"#E2E8F0"}}>
+          {activeMode==='rtg'?"🏆 Hall of Champions":"🏅 Top 10"}
+        </div>
+        <div style={{display:"flex",gap:4}}>
+          {activeMode==='classic'
+            ? classicTabs.map(t=>(
+                <button key={t.key} onClick={()=>setTab(t.key)} style={{
+                  background:tab===t.key?"#003DA5":"transparent",
+                  color:tab===t.key?"#fff":"#475569",
+                  border:`1px solid ${tab===t.key?"#003DA5":"rgba(255,255,255,0.08)"}`,
+                  padding:"2px 8px",borderRadius:20,fontSize:9,fontWeight:600,cursor:"pointer",
+                }}>{t.label}</button>
+              ))
+            : rtgTabs.map(t=>(
+                <button key={t.key} onClick={()=>setRtgTab(t.key)} style={{
+                  background:rtgTab===t.key?"#92400E":"transparent",
+                  color:rtgTab===t.key?"#FDE68A":"#475569",
+                  border:`1px solid ${rtgTab===t.key?"#92400E":"rgba(255,255,255,0.08)"}`,
+                  padding:"2px 8px",borderRadius:20,fontSize:9,fontWeight:600,cursor:"pointer",
+                }}>{t.label}</button>
+              ))
+          }
+        </div>
+      </div>
+
+      {/* Rows */}
+      <div>
+        {loading?(
+          <div style={{textAlign:"center",padding:"16px",fontSize:11,color:"#334155"}}>Memuat...</div>
+        ):data.length===0?(
+          <div style={{textAlign:"center",padding:"16px",fontSize:11,color:"#334155"}}>
+            {activeMode==='rtg'?"Belum ada champion RTG.\nJadilah yang pertama!":"Belum ada data."}
+          </div>
+        ):(
+          data.map((row,i)=>{
+            const isMe   = managerName&&row.manager?.toLowerCase()===managerName.toLowerCase();
+            const medals = ["🥇","🥈","🥉"];
+            if(activeMode==='classic') return(
+              <div key={i} style={{display:"flex",alignItems:"center",padding:"7px 12px",
+                borderBottom:"1px solid rgba(255,255,255,0.03)",
+                background:isMe?"rgba(0,61,165,0.12)":"transparent"}}>
+                <div style={{width:22,fontSize:i<3?13:10,fontWeight:700,color:i<3?"#F59E0B":"#334155",flexShrink:0}}>
+                  {i<3?medals[i]:`${i+1}`}
+                </div>
+                <div style={{flex:1,fontSize:10,fontWeight:isMe?700:400,color:isMe?"#3B82F6":"#CBD5E1",
+                  whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                  {row.manager}{isMe?" (kamu)":""}
+                </div>
+                <div style={{fontSize:11,fontWeight:700,
+                  color:i===0?"#F59E0B":i===1?"#94A3B8":i===2?"#CD7F32":"#475569",marginRight:6}}>
+                  {tab==='ovr'?row.ovr?.toFixed(1):row[tab]}
+                </div>
+                <div style={{fontSize:9,color:"#334155",flexShrink:0,minWidth:52,textAlign:"right"}}>
+                  {timeAgo(row.created_at)}
+                </div>
+              </div>
+            );
+            return(
+              <div key={i} style={{display:"flex",alignItems:"center",padding:"7px 12px",gap:6,
+                borderBottom:"1px solid rgba(255,255,255,0.03)",
+                background:isMe?"rgba(146,64,14,0.15)":"transparent"}}>
+                <div style={{width:22,fontSize:i<3?13:10,fontWeight:700,color:i<3?"#F59E0B":"#334155",flexShrink:0}}>
+                  {i<3?medals[i]:`${i+1}`}
+                </div>
+                <div style={{flex:1,fontSize:10,fontWeight:isMe?700:400,
+                  color:isMe?"#FDE68A":"#CBD5E1",
+                  whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                  {row.manager}{isMe?" (kamu)":""}
+                </div>
+                {rtgTab==='fastest'?(
+                  <>
+                    <div style={{fontSize:11,fontWeight:700,flexShrink:0,
+                      color:row.champion_season===1?"#F59E0B":row.champion_season<=2?"#94A3B8":"#475569"}}>
+                      M{row.champion_season}
+                    </div>
+                    <div style={{fontSize:10,color:"#475569",flexShrink:0,minWidth:40,textAlign:"right"}}>
+                      {row.pts}pts
+                    </div>
+                  </>
+                ):(
+                  <>
+                    <div style={{fontSize:9,color:"#475569",flexShrink:0}}>M{row.champion_season||"?"}</div>
+                    <div style={{fontSize:11,fontWeight:700,flexShrink:0,
+                      color:i===0?"#F59E0B":"#E2E8F0",minWidth:40,textAlign:"right"}}>
+                      {Number(row.ovr).toFixed(1)}
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })
+        )}
+        {activeMode==='rtg'&&(
+          <div style={{padding:"6px 12px",borderTop:"1px solid rgba(255,255,255,0.04)"}}>
+            <div style={{fontSize:9,color:"#334155",textAlign:"center"}}>🏆 Hanya champion yang masuk leaderboard</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 
 // ── LEADERBOARD COMPONENT ─────────────────────────────────────────────────────
@@ -1762,7 +1951,8 @@ function CompletionPage({stageResults, slots, formation, managerName, onRestart,
 }
 
 export default function MaungEleven(){
-  const [phase,setPhase]=useState("name"); // name|formation|draft|simulate|recruit|done
+  const [phase,setPhase]=useState("name"); // name|classic_intro|formation|draft|simulate|recruit|done|about
+  const [selectedMode,setSelectedMode]=useState(()=>{ try{return localStorage.getItem("maung_lastMode")||""}catch(e){return "";} });
   const bp = useBreakpoint();
   const isDesktop = bp === 'desktop';
   const [managerName,setManagerName]=useState(()=>{
@@ -1771,6 +1961,10 @@ export default function MaungEleven(){
   const saveManagerName = (name) => {
     setManagerName(name);
     try{ localStorage.setItem("maung_manager", name); }catch(e){}
+  };
+  const saveMode = (mode) => {
+    setSelectedMode(mode);
+    try{ localStorage.setItem("maung_lastMode", mode); }catch(e){}
   };
   const [formation,setFormation]=useState(null);
   const [slots,setSlots]=useState([]);
@@ -1939,6 +2133,8 @@ export default function MaungEleven(){
     @keyframes nameSlide{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
     @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes leaderboardProgress{from{width:100%}to{width:0%}}
+    @keyframes fadeSlideIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
     *{box-sizing:border-box;margin:0;padding:0}
     .me{font-family:'Inter',sans-serif;background:#070D1A;color:#E2E8F0;border-radius:16px;overflow:hidden;min-height:100dvh}
     body{background:#040810;margin:0}
@@ -1957,10 +2153,15 @@ export default function MaungEleven(){
       <div style={{background:"#0D1B35",borderBottom:"1px solid rgba(255,255,255,0.07)"}}>
         <div style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12}}>
           <TigerBadge size={36}/>
-          <div>
+          <div style={{flex:1}}>
             <div style={{fontSize:16,fontWeight:800,color:"#fff",letterSpacing:-0.5}}>Maung Eleven</div>
             <div style={{fontSize:11,color:"#475569"}}>Persib all-time dream team</div>
           </div>
+          <button onClick={()=>setPhase("about")} style={{
+            background:"transparent",color:"#334155",border:"1px solid rgba(255,255,255,0.08)",
+            borderRadius:8,padding:"5px 10px",fontSize:11,cursor:"pointer",marginLeft:"auto",
+            flexShrink:0,
+          }}>Tentang</button>
           {(phase==="draft")&&ovr>0&&(
             <div style={{marginLeft:"auto",textAlign:"right"}}>
               <div style={{fontSize:20,fontWeight:800,color:"#3B82F6"}}>{ovr}</div>
@@ -1970,7 +2171,7 @@ export default function MaungEleven(){
         </div>
         {/* Version ticker — landing page only */}
         {phase==="name"&&<div style={{background:"#fff",borderTop:"1px solid rgba(255,255,255,0.04)",padding:"5px 18px",display:"flex",alignItems:"center",gap:8,overflow:"hidden"}}>
-          <div style={{fontSize:10,fontWeight:700,color:"#003DA5",whiteSpace:"nowrap",flexShrink:0}}>Versi 2.0 telah aktif!</div>
+          <div style={{fontSize:10,fontWeight:700,color:"#003DA5",whiteSpace:"nowrap",flexShrink:0}}>Versi 3.0 telah aktif!</div>
           <div style={{width:1,height:12,background:"rgba(0,0,0,0.15)",flexShrink:0}}/>
           <div style={{overflow:"hidden",flex:1}}>
             <div style={{
@@ -1979,7 +2180,7 @@ export default function MaungEleven(){
               display:"inline-block",
             }}>
               {/* Duplicate text for seamless looping */}
-              {"Total 180 Pemain Tersedia  ·  Tambahan Formasi Baru  ·  Youth Lebih Banyak  ·  Bisa Skip Simulasi  ·  Pembaruan Data & Rating Pemain  ·     Total 180 Pemain Tersedia  ·  Tambahan Formasi Baru  ·  Youth Lebih Banyak  ·  Bisa Skip Simulasi  ·  Pembaruan Data & Rating Pemain  ·    "}
+              {"Mode Baru: Story Road to Glory  ·  Landing Page Baru  ·  Halaman Tentang  ·  Leaderboard Classic & RTG  ·  180 Pemain Tersedia  ·     Mode Baru: Story Road to Glory  ·  Landing Page Baru  ·  Halaman Tentang  ·  Leaderboard Classic & RTG  ·  180 Pemain Tersedia  ·    "}
             </div>
           </div>
         </div>}
@@ -2006,34 +2207,29 @@ export default function MaungEleven(){
         {/* ── NAME INPUT ── */}
         {phase==="name"&&(
           <div>
-            {/* Desktop: two column / Mobile: single column */}
             <div style={{display:isDesktop?"grid":"block",gridTemplateColumns:"1fr 400px",gap:28,alignItems:"start"}}>
-
-              {/* LEFT COLUMN */}
+              {/* LEFT */}
               <div>
                 {/* Hero */}
-                <div style={{textAlign:"center",padding:"16px 0 12px",marginBottom:4}}>
+                <div style={{textAlign:"center",padding:"16px 0 10px"}}>
                   <div style={{fontSize:13,fontWeight:700,color:"#3B82F6",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Persib All-Time Dream Team</div>
-                  <div style={{fontSize:isDesktop?28:22,fontWeight:800,color:"#F1F5F9",lineHeight:1.2,marginBottom:10}}>
-                    Bangun tim terbaikmu.<br/>Taklukkan Asia.
+                  <div style={{fontSize:isDesktop?26:20,fontWeight:800,color:"#F1F5F9",lineHeight:1.25,marginBottom:8}}>
+                    Bangun tim impian Persib.<br/>Pilih caramu.
                   </div>
-                  <div style={{fontSize:13,color:"#64748B",lineHeight:1.7,maxWidth:isDesktop?420:320,margin:"0 auto"}}>
-                    Draft 11 legenda Persib dari berbagai era. Bawa mereka melewati
-                    tiga kompetisi: <span style={{color:"#E2E8F0",fontWeight:600}}>Liga Indonesia</span>,{" "}
-                    <span style={{color:"#E2E8F0",fontWeight:600}}>ASEAN Club Championship</span>, hingga{" "}
-                    <span style={{color:"#E2E8F0",fontWeight:600}}>AFC Champions League Elite</span>.
+                  <div style={{fontSize:12,color:"#64748B",lineHeight:1.6,maxWidth:340,margin:"0 auto"}}>
+                    Dari draft instan hingga perjalanan panjang 5 musim — dua cara berbeda untuk menaklukkan Liga bersama Maung XI.
                   </div>
                 </div>
 
                 {/* Showcase cards */}
                 {(()=>{
                   const showcase=[
-                    PLAYERS.find(p=>p.name==="Abanda Herman"),
-                    PLAYERS.find(p=>p.name==="Ciro Alves"),
-                    PLAYERS.find(p=>p.name==="Robby Darwis"),
+                    PLAYERS.find(p=>p.name==="Mbida Messi"),
+                    PLAYERS.find(p=>p.name==="Thom Haye"),
+                    PLAYERS.find(p=>p.name==="Ajat Sudrajat"),
                   ].filter(Boolean);
                   return(
-                    <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:14}}>
+                    <div style={{display:"flex",gap:6,justifyContent:"center",margin:"14px 0"}}>
                       {showcase.map(p=>{
                         const tc=TIER_COLOR[p.tier],tg=TIER_GLOW[p.tier],tb=TIER_BG[p.tier];
                         const cc=CAT_COLOR[getPosCategory(p.pos[0])];
@@ -2042,7 +2238,7 @@ export default function MaungEleven(){
                             padding:"8px 6px",textAlign:"center",width:isDesktop?110:90,flexShrink:0,
                             boxShadow:`0 3px 10px ${tg}`}}>
                             <div style={{fontSize:8,fontWeight:800,color:tc,letterSpacing:1.5,textTransform:"uppercase",marginBottom:3}}>{p.tier}</div>
-                            <div style={{fontSize:isDesktop?26:22,fontWeight:800,color:tc,lineHeight:1,marginBottom:4,textShadow:`0 0 10px ${tg}`}}>{p.rating}</div>
+                            <div style={{fontSize:isDesktop?24:20,fontWeight:800,color:tc,lineHeight:1,marginBottom:4,textShadow:`0 0 10px ${tg}`}}>{p.rating}</div>
                             <div style={{fontSize:9,fontWeight:700,color:"#F1F5F9",marginBottom:4,lineHeight:1.2}}>{p.name}</div>
                             <span style={{fontSize:8,fontWeight:700,color:cc,background:`${cc}18`,padding:"1px 5px",borderRadius:20}}>{p.pos[0]}</span>
                           </div>
@@ -2052,50 +2248,193 @@ export default function MaungEleven(){
                   );
                 })()}
 
-                {/* Pills */}
-                <div style={{display:"flex",flexWrap:"wrap",gap:5,justifyContent:"center",marginBottom:14}}>
+                {/* Mode selector cards — 3D button style */}
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
                   {[
-                    {icon:"🎴",txt:"Roll 5 pilihan per slot"},{icon:"🏆",txt:"Wajib juara untuk lanjut"},
-                    {icon:"💜",txt:"Legenda 3% chance"},{icon:"🌟",txt:"Youth Chemistry bonus"},
-                    {icon:"🔁",txt:"Re-roll 1x per stage"},{icon:"🆕",txt:"Rekrutan di tiap stage"},
-                  ].map(({icon,txt})=>(
-                    <div key={txt} style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",
-                      borderRadius:20,padding:"5px 10px",fontSize:11,color:"#94A3B8",
-                      display:"flex",alignItems:"center",gap:5}}>
-                      <span>{icon}</span><span>{txt}</span>
-                    </div>
-                  ))}
+                    {
+                      key:"classic",
+                      icon:"⚡",
+                      title:"Classic",
+                      subtitle:"Dream Team",
+                      desc:"Draft tim impian Persib. Taklukkan 3 kompetisi Asia. Satu kesempatan.",
+                      color:"#3B82F6",
+                      shadowColor:"rgba(59,130,246,0.5)",
+                      bg:"linear-gradient(145deg, #1E3A6E, #0F2044)",
+                      bgHover:"linear-gradient(145deg, #2448A0, #1A3570)",
+                    },
+                    {
+                      key:"rtg",
+                      icon:"📖",
+                      title:"Story",
+                      subtitle:"Road to Glory",
+                      desc:"Bangun dari nol. 5 musim, transfer window, dan coin economy.",
+                      color:"#F59E0B",
+                      shadowColor:"rgba(245,158,11,0.5)",
+                      bg:"linear-gradient(145deg, #4A3000, #2D1D00)",
+                      bgHover:"linear-gradient(145deg, #6B4500, #3D2800)",
+                    },
+                  ].map(mode=>{
+                    const isSelected = selectedMode===mode.key;
+                    return(
+                      <div key={mode.key}
+                        onClick={()=>saveMode(isSelected?"":mode.key)}
+                        style={{
+                          background:isSelected?mode.bgHover:mode.bg,
+                          border:`2px solid ${isSelected?mode.color:"rgba(255,255,255,0.06)"}`,
+                          borderRadius:14,padding:"18px 14px 14px",cursor:"pointer",
+                          transition:"all 0.15s ease",
+                          transform:isSelected?"translateY(-3px) scale(1.02)":"translateY(0) scale(1)",
+                          boxShadow:isSelected?`0 8px 24px ${mode.shadowColor}, 0 2px 0 ${mode.color}33`:"0 4px 0 rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3)",
+                          userSelect:"none",
+                        }}>
+                        <div style={{fontSize:28,marginBottom:6,filter:isSelected?"drop-shadow(0 0 8px "+mode.color+")":"none"}}>{mode.icon}</div>
+                        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:0}}>
+                          <div style={{fontSize:14,fontWeight:800,color:isSelected?mode.color:"#E2E8F0",letterSpacing:-0.3}}>{mode.title}</div>
+                          {mode.key==="rtg"&&(
+                            <div style={{fontSize:8,fontWeight:800,background:"#F59E0B",color:"#1a0a00",
+                              padding:"2px 6px",borderRadius:20,letterSpacing:1,textTransform:"uppercase",
+                              flexShrink:0,lineHeight:1.4}}>NEW</div>
+                          )}
+                        </div>
+                        <div style={{fontSize:11,fontWeight:600,color:isSelected?mode.color:"#475569",marginBottom:10}}>{mode.subtitle}</div>
+                        <div style={{fontSize:11,color:isSelected?"#94A3B8":"#475569",lineHeight:1.6}}>{mode.desc}</div>
+                        {isSelected&&(
+                          <div style={{marginTop:10,background:mode.color,borderRadius:6,padding:"5px 0",textAlign:"center",fontSize:11,fontWeight:700,color:"#fff"}}>
+                            {mode.key==="classic"?"Pilih Classic ✓":"Pilih Story ✓"}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
 
-                {/* Name input */}
-                <div style={{background:"#0D1828",borderRadius:12,padding:"16px",marginBottom:14}}>
-                  <div style={{fontSize:12,fontWeight:700,color:"#E2E8F0",marginBottom:4}}>Siapa nama manajermu?</div>
-                  <div style={{fontSize:11,color:"#475569",marginBottom:10}}>Namamu akan muncul di hasil akhir dan share card</div>
-                  <input type="text" maxLength={15} value={managerName}
-                    onChange={e=>saveManagerName(e.target.value.slice(0,15))}
-                    placeholder="Masukkan nama (maks 15 karakter)"
-                    style={{width:"100%",background:"#060B14",border:"1px solid rgba(255,255,255,0.12)",
-                      borderRadius:8,padding:"10px 12px",fontSize:14,color:"#E2E8F0",
-                      outline:"none",fontFamily:"inherit",marginBottom:6,boxSizing:"border-box"}}
-                  />
-                  <div style={{fontSize:10,color:"#334155",textAlign:"right"}}>{managerName.length}/15</div>
-                </div>
+                {/* Name input — revealed after mode selected */}
+                {selectedMode&&(
+                  <div style={{
+                    animation:"fadeSlideIn 0.25s ease",
+                    background:"#0D1828",borderRadius:12,padding:"14px",marginBottom:14,
+                  }}>
+                    <div style={{fontSize:12,fontWeight:700,color:"#E2E8F0",marginBottom:3}}>Siapa nama manajermu?</div>
+                    <div style={{fontSize:11,color:"#475569",marginBottom:10}}>Namamu akan muncul di hasil akhir dan leaderboard</div>
+                    <input type="text" maxLength={15} value={managerName}
+                      onChange={e=>saveManagerName(e.target.value.slice(0,15))}
+                      placeholder="Masukkan nama (maks 15 karakter)"
+                      autoFocus
+                      style={{width:"100%",background:"#060B14",border:"1px solid rgba(255,255,255,0.12)",
+                        borderRadius:8,padding:"10px 12px",fontSize:14,color:"#E2E8F0",
+                        outline:"none",fontFamily:"inherit",marginBottom:4,boxSizing:"border-box"}}
+                    />
+                    <div style={{fontSize:10,color:"#334155",textAlign:"right",marginBottom:12}}>{managerName.length}/15</div>
+                    <button className="btn-p"
+                      disabled={!managerName.trim()}
+                      onClick={()=>{
+                        if(selectedMode==="rtg"){
+                          try{ localStorage.setItem("maung_pendingMode","rtg"); }catch(e){}
+                          window.location.reload();
+                        } else {
+                          setPhase("classic_intro");
+                        }
+                      }}
+                      style={{background: selectedMode==="rtg"?"#F59E0B":"#003DA5"}}
+                    >
+                      {!managerName.trim()
+                        ? "Masukkan nama dulu"
+                        : selectedMode==="rtg"
+                          ? `Mulai Journey, ${managerName.trim()}! →`
+                          : `Siap, ${managerName.trim()}! Pilih Formasi →`
+                      }
+                    </button>
+                  </div>
+                )}
 
-                <button className="btn-p" disabled={!managerName.trim()} onClick={()=>setPhase("formation")}>
-                  {managerName.trim()?`Siap, ${managerName.trim()}! Pilih Formasi →`:"Masukkan nama dulu"}
-                </button>
-
-                {/* Leaderboard mobile only */}
-                {!isDesktop&&<div style={{marginTop:16}}><Leaderboard managerName={managerName} compact/></div>}
+                {/* Mobile leaderboard */}
+                {!isDesktop&&(
+                  <div style={{marginTop:8}}>
+                    <LandingLeaderboard managerName={managerName}/>
+                  </div>
+                )}
               </div>
 
-              {/* RIGHT COLUMN — leaderboard desktop only */}
+              {/* RIGHT — Leaderboard desktop */}
               {isDesktop&&(
                 <div style={{position:"sticky",top:16}}>
-                  <Leaderboard managerName={managerName} compact/>
+                  <LandingLeaderboard managerName={managerName}/>
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+
+        {/* ── CLASSIC INTRO ── */}
+        {phase==="classic_intro"&&(
+          <div style={{maxWidth:520,margin:"0 auto"}}>
+            {/* Back button */}
+            <button onClick={()=>setPhase("name")} style={{
+              background:"transparent",color:"#475569",border:"none",
+              fontSize:12,cursor:"pointer",padding:"0 0 20px",display:"flex",alignItems:"center",gap:4,
+            }}>← Ganti Mode</button>
+
+            {/* Hero banner */}
+            <div style={{
+              background:"linear-gradient(135deg, #0D1E45, #0A1530)",
+              border:"1px solid rgba(59,130,246,0.25)",
+              borderRadius:16,padding:"28px 20px 22px",textAlign:"center",marginBottom:16,
+              position:"relative",overflow:"hidden",
+            }}>
+              <div style={{position:"absolute",top:-30,right:-30,fontSize:80,opacity:0.06,transform:"rotate(15deg)"}}>⚡</div>
+              <div style={{fontSize:11,fontWeight:700,color:"#3B82F6",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Mode Classic</div>
+              <div style={{fontSize:26,fontWeight:800,color:"#F1F5F9",lineHeight:1.2,marginBottom:10}}>
+                Dream Team
+              </div>
+              <div style={{fontSize:13,color:"#64748B",lineHeight:1.8,maxWidth:360,margin:"0 auto"}}>
+                Satu kesempatan. Sebelas pemain. Tiga kompetisi.<br/>
+                <span style={{color:"#94A3B8"}}>Bisakah kamu memimpin Maung XI menaklukkan Asia?</span>
+              </div>
+            </div>
+
+            {/* Storytelling */}
+            <div style={{background:"#0D1828",borderRadius:12,padding:"16px",marginBottom:12}}>
+              <div style={{fontSize:12,fontWeight:700,color:"#3B82F6",marginBottom:10,textTransform:"uppercase",letterSpacing:1}}>Cara Bermain</div>
+              {[
+                {step:"01",icon:"🎴",title:"Draft Tim Impianmu",desc:"Roll 5 kartu per slot. Tier reveal dulu — baru nama muncul. Kamu yang pilih siapa yang layak masuk."},
+                {step:"02",icon:"⚽",title:"Taklukkan 3 Kompetisi",desc:"Indonesia Super League → ASEAN Club Championship → AFC Champions League Elite. Hanya juara yang boleh lanjut."},
+                {step:"03",icon:"🆕",title:"Rekrut Pemain Baru",desc:"Tiap lolos stage, rekrut 1 pemain baru untuk memperkuat tim sebelum tantangan berikutnya."},
+                {step:"04",icon:"🏆",title:"Satu Sesi, Satu Nasib",desc:"Tidak ada save. Tidak ada reload. Ini permainan sekali jalan — setiap pilihan menentukan nasib Maung XI."},
+              ].map(({step,icon,title,desc})=>(
+                <div key={step} style={{display:"flex",gap:12,marginBottom:14,alignItems:"flex-start"}}>
+                  <div style={{flexShrink:0,width:32,height:32,borderRadius:8,background:"rgba(59,130,246,0.1)",
+                    border:"1px solid rgba(59,130,246,0.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14}}>
+                    {icon}
+                  </div>
+                  <div>
+                    <div style={{fontSize:12,fontWeight:700,color:"#E2E8F0",marginBottom:2}}>{title}</div>
+                    <div style={{fontSize:11,color:"#64748B",lineHeight:1.6}}>{desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Key features pills */}
+            <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:18}}>
+              {["💜 Legenda 3% chance","🌟 Youth Chemistry +3/+6 OVR","🔁 Re-roll 1x per stage","⏩ Skip Simulasi","🏅 Leaderboard Online"].map(p=>(
+                <div key={p} style={{
+                  background:"rgba(59,130,246,0.08)",border:"1px solid rgba(59,130,246,0.15)",
+                  borderRadius:20,padding:"4px 10px",fontSize:10,color:"#64748B",
+                }}>
+                  {p}
+                </div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <button className="btn-p" onClick={()=>setPhase("formation")} style={{
+              background:"linear-gradient(135deg, #003DA5, #2563EB)",
+              boxShadow:"0 4px 16px rgba(0,61,165,0.4)",
+              fontSize:15,
+            }}>
+              Siap, {managerName}! Pilih Formasi →
+            </button>
           </div>
         )}
 
@@ -2255,6 +2594,117 @@ export default function MaungEleven(){
 
       </div>
 
+
+        {/* ── ABOUT PAGE ── */}
+        {phase==="about"&&(
+          <div>
+            {/* Header — logo + title + back in one bar */}
+            <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:24,paddingBottom:20,borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+              <TigerBadge size={44}/>
+              <div style={{flex:1}}>
+                <div style={{fontSize:18,fontWeight:800,color:"#F1F5F9",lineHeight:1.2}}>Maung Eleven</div>
+                <div style={{fontSize:11,color:"#475569"}}>Persib All-Time Dream Team Game</div>
+              </div>
+              <button onClick={()=>setPhase("name")} style={{
+                background:"rgba(255,255,255,0.04)",color:"#475569",
+                border:"1px solid rgba(255,255,255,0.08)",
+                borderRadius:8,padding:"6px 12px",fontSize:11,cursor:"pointer",
+                flexShrink:0,
+              }}>← Kembali</button>
+            </div>
+
+            {/* About game */}
+            <div style={{background:"#0D1828",borderRadius:12,padding:"16px",marginBottom:12}}>
+              <div style={{fontSize:12,fontWeight:700,color:"#3B82F6",marginBottom:8,textTransform:"uppercase",letterSpacing:1}}>Tentang Game</div>
+              <div style={{fontSize:13,color:"#94A3B8",lineHeight:1.8}}>
+                Maung Eleven adalah game simulasi sepak bola berbasis draft yang terinspirasi dari <span style={{color:"#E2E8F0"}}>38-0.app</span>. 
+                Kamu bisa merakit tim impian dari 180 pemain legendaris Persib Bandung lintas generasi, 
+                lalu memimpin mereka melewati kompetisi dari Liga Indonesia hingga AFC Champions League Elite.
+              </div>
+              <div style={{fontSize:13,color:"#94A3B8",lineHeight:1.8,marginTop:8}}>
+                Tersedia dalam dua mode: <span style={{color:"#3B82F6",fontWeight:600}}>Classic: Dream Team</span> untuk pengalaman cepat satu sesi, 
+                dan <span style={{color:"#F59E0B",fontWeight:600}}>Story: Road to Glory</span> untuk perjalanan panjang membangun dinasti selama 5 musim.
+              </div>
+            </div>
+
+            {/* Developer */}
+            <div style={{background:"#0D1828",borderRadius:12,padding:"16px",marginBottom:12}}>
+              <div style={{fontSize:12,fontWeight:700,color:"#3B82F6",marginBottom:8,textTransform:"uppercase",letterSpacing:1}}>Developer</div>
+              <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+                <TigerBadge size={36}/>
+                <div>
+                  <div style={{fontSize:13,fontWeight:700,color:"#E2E8F0"}}>Raka Kostarian</div>
+                  <div style={{fontSize:11,color:"#475569"}}>Indie developer · Bobotoh 🔵</div>
+                </div>
+              </div>
+              <div style={{fontSize:12,color:"#94A3B8",lineHeight:1.7,marginBottom:14}}>
+                Game ini dibuat dengan penuh cinta untuk komunitas Bobotoh. Dibuat solo dari nol pada 2026 — mulai dari desain, database pemain, hingga simulasi pertandingan.
+              </div>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                <a href="https://twitter.com/pembelakebaykan" target="_blank" rel="noopener noreferrer" style={{
+                  display:"flex",alignItems:"center",gap:6,background:"rgba(29,161,242,0.1)",
+                  border:"1px solid rgba(29,161,242,0.3)",borderRadius:8,padding:"8px 14px",
+                  fontSize:12,fontWeight:600,color:"#1DA1F2",textDecoration:"none",
+                }}>𝕏 @pembelakebaykan</a>
+                <a href="https://trakteer.id/rakakostarian" target="_blank" rel="noopener noreferrer" style={{
+                  display:"flex",alignItems:"center",gap:6,background:"rgba(239,68,68,0.1)",
+                  border:"1px solid rgba(239,68,68,0.3)",borderRadius:8,padding:"8px 14px",
+                  fontSize:12,fontWeight:600,color:"#EF4444",textDecoration:"none",
+                }}>❤️ Dukung di Trakteer</a>
+              </div>
+            </div>
+
+            {/* Version history */}
+            <div style={{background:"#0D1828",borderRadius:12,padding:"16px",marginBottom:12}}>
+              <div style={{fontSize:12,fontWeight:700,color:"#3B82F6",marginBottom:12,textTransform:"uppercase",letterSpacing:1}}>Riwayat Versi</div>
+              {[
+                {
+                  version:"v3.0",badge:"live",color:"#F59E0B",
+                  title:"Mode Story: Road to Glory",
+                  items:[
+                    "New mode: Story — Road to Glory (5 musim, transfer window, coin economy)",
+                    "Hall of Champions leaderboard khusus mode RTG",
+                    "185 pemain tersedia + 5 pemain baru (Ajat Sudrajat, Farshad Noor, Ilham M., Cucu Hidayat, Boy Jati Asmara)",
+                    "Update rating: Atep Rizal, Vladimir Vujovic, Nick Kuipers naik ke Gold",
+                    "Landing page baru dengan mode selector & auto-rotate leaderboard",
+                    "Halaman Tentang & Riwayat Versi",
+                  ],
+                },
+                {
+                  version:"v2.0",badge:"live",color:"#22C55E",
+                  title:"Major Update",
+                  items:["180 pemain tersedia + update rating","Leaderboard online (Supabase)","2 formasi baru: 4-2-4 & 4-3-2-1","Tombol Skip Simulasi","Improvement poster hasil","Bug fixing (W-D-L sync, statistik)","Responsiveness PC & Tablet"],
+                },
+                {
+                  version:"v1.0",badge:"",color:"#475569",
+                  title:"Launch Awal",
+                  items:["Draft 11 pemain sistem roll gacha","Simulasi 34 pertandingan","3 stage kompetisi","Youth Chemistry bonus","Share card hasil"],
+                },
+              ].map(v=>(
+                <div key={v.version} style={{marginBottom:16,paddingBottom:16,borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+                    <div style={{fontSize:13,fontWeight:800,color:v.color}}>{v.version}</div>
+                    {v.badge&&<div style={{fontSize:9,fontWeight:700,background:v.color==="#F59E0B"?"rgba(245,158,11,0.15)":"rgba(34,197,94,0.15)",
+                      color:v.color,padding:"2px 7px",borderRadius:20,textTransform:"uppercase",letterSpacing:1}}>{v.badge}</div>}
+                    <div style={{fontSize:12,color:"#94A3B8",fontWeight:600}}>{v.title}</div>
+                  </div>
+                  <div style={{paddingLeft:4}}>
+                    {v.items.map(item=>(
+                      <div key={item} style={{fontSize:11,color:"#475569",padding:"2px 0",display:"flex",alignItems:"flex-start",gap:6}}>
+                        <span style={{color:"#334155",marginTop:1}}>·</span><span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{textAlign:"center",padding:"8px 0 16px",fontSize:11,color:"#1E293B"}}>
+              Maung Eleven © 2026 · dibuat oleh rakakostarian
+            </div>
+          </div>
+        )}
+
       {/* ── GAME FOOTER ── */}
       <div style={{
         borderTop:"1px solid rgba(255,255,255,0.04)",
@@ -2269,6 +2719,8 @@ export default function MaungEleven(){
             <span style={{color:"#374151"}}>dibuat oleh rakakostarian</span>
             <span style={{color:"#1E293B",margin:"0 6px"}}>·</span>
             <span style={{color:"#2D3748"}}>2026</span>
+            <span style={{color:"#1E293B",margin:"0 6px"}}>·</span>
+            <span onClick={()=>setPhase("about")} style={{color:"#374151",cursor:"pointer",textDecoration:"underline"}}>Tentang</span>
           </div>
         </div>
       </div>
