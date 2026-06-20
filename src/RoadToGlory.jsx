@@ -1127,7 +1127,6 @@ function RTGStoryIntro({managerName, dispatch, hasSavedSession, savedSeason}){
   const ctaRef = useRef(null);
   return(
     <div style={{maxWidth:520,margin:"0 auto"}}>
-      <FloatingCTA targetRef={ctaRef} label="Mulai Perjalanan"/>
       {/* Back button — same style as Classic */}
       <button onClick={()=>dispatch({type:"GO_HOME"})} style={{
         background:"transparent",color:"#475569",border:"none",
@@ -1310,8 +1309,7 @@ function RTGFormationSelector({state, dispatch}){
               fontSize:14,fontWeight:700,cursor:"pointer",
               boxShadow:"0 4px 16px rgba(146,64,14,0.4)",
             }}>
-              <FloatingCTA targetRef={ctaRef} label="Pilih Formasi"/>
-      Lihat Draft Pemain & Beli →
+              Lihat Draft Pemain & Beli →
             </button>
             <button onClick={()=>dispatch({type:"SKIP_DRAFT"})} style={{
               width:"100%",background:"transparent",
